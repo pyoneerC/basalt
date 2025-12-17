@@ -466,18 +466,27 @@ evidence = client.notarize(
                                         </div>
                                     </div>
 
-                                    <div class="flex flex-col sm:flex-row gap-4 mt-8">
-                                        <a href="${e.solana_tx}" target="_blank" class="flex-1 py-3 px-4 rounded bg-purple-600/20 border border-purple-500/50 text-purple-300 hover:bg-purple-600/30 transition text-center flex items-center justify-center gap-2">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                                            View On-Chain Proof
+                                    <div class="flex flex-col gap-4 mt-8">
+                                        <!-- Primary CTA: Verify on Basalt -->
+                                        <a href="/verify/${e.ipfs_cid}" class="w-full py-4 px-6 rounded-lg bg-brand-600 hover:bg-brand-500 border border-brand-400/50 text-white font-bold text-center flex items-center justify-center gap-3 transition-all hover:shadow-lg hover:shadow-brand-500/30 hover:-translate-y-0.5">
+                                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+                                            View Verification Page
                                         </a>
-                                        <a href="${e.ipfs_url}" target="_blank" class="flex-1 py-3 px-4 rounded bg-blue-600/20 border border-blue-500/50 text-blue-300 hover:bg-blue-600/30 transition text-center flex items-center justify-center gap-2">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.58 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.58 4 8 4s8-1.79 8-4M4 7c0-2.21 3.58-4 8-4s8 1.79 8 4m0 5c0 2.21-3.58 4-8 4s-8-1.79-8-4"></path></svg>
-                                            Download from Vault
-                                        </a>
-                                        <a href="https://contentcredentials.org/verify" target="_blank" class="flex-1 py-3 px-4 rounded bg-white/5 border border-white/20 text-white hover:bg-white/10 transition text-center flex items-center justify-center gap-2">
-                                            Verify Certificate
-                                        </a>
+                                        
+                                        <!-- Secondary Actions -->
+                                        <div class="flex flex-col sm:flex-row gap-3">
+                                            <a href="${e.solana_tx}" target="_blank" class="flex-1 py-3 px-4 rounded bg-purple-600/20 border border-purple-500/50 text-purple-300 hover:bg-purple-600/30 transition text-center flex items-center justify-center gap-2 text-sm">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                                                On-Chain Proof
+                                            </a>
+                                            <a href="${e.ipfs_url}" target="_blank" class="flex-1 py-3 px-4 rounded bg-blue-600/20 border border-blue-500/50 text-blue-300 hover:bg-blue-600/30 transition text-center flex items-center justify-center gap-2 text-sm">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.58 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.58 4 8 4s8-1.79 8-4M4 7c0-2.21 3.58-4 8-4s8 1.79 8 4m0 5c0 2.21-3.58 4-8 4s-8-1.79-8-4"></path></svg>
+                                                IPFS Vault
+                                            </a>
+                                            <a href="https://contentcredentials.org/verify" target="_blank" class="flex-1 py-3 px-4 rounded bg-white/5 border border-white/20 text-white hover:bg-white/10 transition text-center flex items-center justify-center gap-2 text-sm">
+                                                C2PA Verify
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

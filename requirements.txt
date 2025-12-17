@@ -7,3 +7,4 @@ solders
 requests
 jinja2
 python-dotenv
+Pillow
