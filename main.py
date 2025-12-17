@@ -181,9 +181,12 @@ async def read_root(request: Request):
 @app.post("/notarize")
 async def notarize(file: UploadFile = File(...)):
     
-    # 1. Save Raw File
-    temp_filename = f"temp_{int(time.time())}.jpg"
-    signed_filename = f"signed_{int(time.time())}.jpg"
+    # 1. Save Raw File (Use /tmp directory for Vercel/Lambda)
+    import tempfile
+    tmp_dir = tempfile.gettempdir()
+    
+    temp_filename = os.path.join(tmp_dir, f"temp_{int(time.time())}.jpg")
+    signed_filename = os.path.join(tmp_dir, f"signed_{int(time.time())}.jpg")
     
     try:
         with open(temp_filename, "wb") as buffer:
