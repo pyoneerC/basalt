@@ -211,9 +211,62 @@ async def read_root(request: Request):
 
 @app.get("/verify/{cid}", response_class=HTMLResponse)
 async def verify_page(request: Request, cid: str):
-    # In a real app, we would fetch metadata for this CID.
-    # For MVP, we simulate it via the template.
+    # Pass the CID to the template - verification happens via API
     return templates.TemplateResponse("verify.html", {"request": request, "cid": cid})
+
+@app.get("/api/verify/{cid}")
+async def verify_asset(cid: str):
+    """
+    REAL verification endpoint that:
+    1. Checks if file exists on IPFS
+    2. Downloads and computes hash
+    3. Returns actual verification status
+    """
+    import hashlib
+    
+    result = {
+        "cid": cid,
+        "ipfs_exists": False,
+        "hash": None,
+        "verified": False,
+        "error": None
+    }
+    
+    # Try to fetch from IPFS gateway
+    ipfs_url = f"https://gateway.pinata.cloud/ipfs/{cid}"
+    
+    try:
+        logger.info(f"Verifying CID: {cid}")
+        
+        # Check if file exists on IPFS
+        response = requests.head(ipfs_url, timeout=10)
+        
+        if response.status_code == 200:
+            result["ipfs_exists"] = True
+            
+            # Download the file to compute hash
+            file_response = requests.get(ipfs_url, timeout=30)
+            if file_response.status_code == 200:
+                file_hash = hashlib.sha256(file_response.content).hexdigest()
+                result["hash"] = file_hash
+                result["verified"] = True
+                result["file_size"] = len(file_response.content)
+                logger.info(f"Verification SUCCESS for {cid}")
+            else:
+                result["error"] = f"Failed to download file: HTTP {file_response.status_code}"
+        else:
+            result["error"] = f"File not found on IPFS (HTTP {response.status_code})"
+            logger.warning(f"CID not found: {cid}")
+            
+    except requests.exceptions.Timeout:
+        result["error"] = "IPFS gateway timeout"
+    except requests.exceptions.ConnectionError:
+        result["error"] = "Cannot connect to IPFS gateway"
+    except Exception as e:
+        result["error"] = str(e)
+        logger.error(f"Verification error: {e}")
+    
+    return JSONResponse(result)
 
 @app.post("/notarize")
 async def notarize(file: UploadFile = File(...)):

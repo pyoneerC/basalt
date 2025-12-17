@@ -61,15 +61,15 @@
 
         <!-- Status Indicator -->
         <div class="absolute top-0 left-0 w-full h-1 bg-gray-800" id="progress-bar">
-            <div class="h-full bg-brand-500 w-0 transition-all duration-[3000ms] ease-out" id="progress-fill"></div>
+            <div class="h-full bg-brand-500 w-0 transition-all duration-500 ease-out" id="progress-fill"></div>
         </div>
 
         <div class="flex flex-col items-center text-center space-y-8 mt-4">
 
-            <!-- Asset Preview (Mock for now, would be fetched from IPFS) -->
+            <!-- Asset Preview -->
             <div class="relative w-32 h-32 group">
-                <div
-                    class="absolute inset-0 bg-brand-500 blur-xl opacity-20 rounded-full group-hover:opacity-40 transition-opacity">
+                <div class="absolute inset-0 bg-brand-500 blur-xl opacity-20 rounded-full group-hover:opacity-40 transition-opacity"
+                    id="glow-effect">
                 </div>
                 <div
                     class="relative w-full h-full border-2 border-dashed border-gray-700 rounded-xl flex items-center justify-center bg-gray-900/50">
@@ -78,10 +78,10 @@
                             d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
                         </path>
                     </svg>
-                    <!-- Overlay Checkmark (Hidden initially) -->
+                    <!-- Overlay Checkmark (Success) -->
                     <div id="final-check"
                         class="absolute inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm rounded-xl opacity-0 scale-50 transition-all duration-500">
-                        <div
+                        <div id="final-icon"
                             class="w-12 h-12 bg-brand-500 rounded-full flex items-center justify-center shadow-[0_0_20px_#22c55e]">
                             <svg class="w-6 h-6 text-black font-bold" fill="none" stroke="currentColor"
                                 viewBox="0 0 24 24">
@@ -105,27 +105,56 @@
                 <!-- Step 2 -->
                 <div class="flex items-center justify-between p-4 bg-white/5 rounded border border-white/5 opacity-50"
                     id="step-2">
-                    <span class="text-gray-400">Verifying C2PA Signature...</span>
+                    <span class="text-gray-400">Computing SHA-256 Hash...</span>
                     <span class="w-2 h-2 bg-gray-600 rounded-full status-dot"></span>
                 </div>
 
                 <!-- Step 3 -->
                 <div class="flex items-center justify-between p-4 bg-white/5 rounded border border-white/5 opacity-50"
                     id="step-3">
-                    <span class="text-gray-400">Checking Solana Anchor (Mainnet)...</span>
+                    <span class="text-gray-400">Validating Integrity...</span>
                     <span class="w-2 h-2 bg-gray-600 rounded-full status-dot"></span>
                 </div>
             </div>
 
             <!-- Final Result (Hidden) -->
-            <div id="final-result" class="hidden animate-fade-in-up">
-                <h2 class="text-2xl font-bold text-white mb-2">AUTHENTICITY CONFIRMED</h2>
-                <p class="text-brand-500 font-mono text-xs tracking-widest uppercase">Immutable Record Found</p>
-                <div class="mt-8 grid grid-cols-2 gap-4 text-xs font-mono text-gray-500">
-                    <div class="text-right">CID:</div>
-                    <div class="text-left text-white truncate">{{ cid }}</div>
-                    <div class="text-right whitespace-nowrap">BLOCK HEIGHT:</div>
-                    <div class="text-left text-white">238,491,001</div>
+            <div id="final-result" class="hidden w-full">
+                <!-- Success State -->
+                <div id="success-state" class="hidden">
+                    <h2 class="text-2xl font-bold text-white mb-2">AUTHENTICITY CONFIRMED</h2>
+                    <p class="text-brand-500 font-mono text-xs tracking-widest uppercase">Immutable Record Found</p>
+                    <div class="mt-6 grid grid-cols-2 gap-4 text-xs font-mono text-gray-500">
+                        <div class="text-right">CID:</div>
+                        <div class="text-left text-white truncate" id="result-cid">{{ cid }}</div>
+                        <div class="text-right">SHA-256:</div>
+                        <div class="text-left text-brand-400 truncate" id="result-hash">-</div>
+                        <div class="text-right">SIZE:</div>
+                        <div class="text-left text-white" id="result-size">-</div>
+                    </div>
+                    <a href="https://gateway.pinata.cloud/ipfs/{{ cid }}" target="_blank"
+                        class="mt-6 inline-flex items-center gap-2 px-4 py-2 bg-brand-500/20 border border-brand-500/50 rounded text-brand-400 text-sm hover:bg-brand-500/30 transition">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                        </svg>
+                        Download Original Asset
+                    </a>
+                </div>
+
+                <!-- Failure State -->
+                <div id="failure-state" class="hidden">
+                    <h2 class="text-2xl font-bold text-red-500 mb-2">VERIFICATION FAILED</h2>
+                    <p class="text-red-400 font-mono text-xs tracking-widest uppercase" id="error-message">Asset Not
+                        Found</p>
+                    <div class="mt-6 p-4 bg-red-900/20 border border-red-500/30 rounded text-left">
+                        <p class="text-red-300 text-sm font-mono" id="error-details">
+                            The requested CID could not be found on IPFS.
+                        </p>
+                    </div>
+                    <a href="/"
+                        class="mt-6 inline-flex items-center gap-2 px-4 py-2 bg-white/10 border border-white/20 rounded text-white text-sm hover:bg-white/20 transition">
+                        Return to Homepage
+                    </a>
                 </div>
             </div>
 
@@ -133,40 +162,74 @@
     </div>
 
     <script>
-        // Simulation Script
+        // REAL Verification Script - Actually calls the API!
         document.addEventListener('DOMContentLoaded', () => {
+            const cid = "{{ cid }}";
             const progressBar = document.getElementById('progress-fill');
             const step1 = document.getElementById('step-1');
             const step2 = document.getElementById('step-2');
             const step3 = document.getElementById('step-3');
             const finalCheck = document.getElementById('final-check');
             const finalResult = document.getElementById('final-result');
+            const finalIcon = document.getElementById('final-icon');
+            const glowEffect = document.getElementById('glow-effect');
 
-            // Start
-            setTimeout(() => {
-                progressBar.style.width = '33%';
-                updateStep(step1, 'Asset Retrieved', true);
-                activateStep(step2);
-            }, 1000);
+            // Start verification
+            progressBar.style.width = '20%';
 
-            setTimeout(() => {
-                progressBar.style.width = '66%';
-                updateStep(step2, 'Signature Valid (RSA-2048)', true);
-                activateStep(step3);
-            }, 2500);
+            // Call the REAL verification API
+            fetch(`/api/verify/${cid}`)
+                .then(response => response.json())
+                .then(data => {
+                    // Step 1: IPFS Check
+                    setTimeout(() => {
+                        progressBar.style.width = '40%';
+                        if (data.ipfs_exists) {
+                            updateStep(step1, 'Asset Retrieved from IPFS', true);
+                        } else {
+                            updateStep(step1, 'Asset NOT FOUND on IPFS', false);
+                        }
+                        activateStep(step2);
+                    }, 500);
 
-            setTimeout(() => {
-                progressBar.style.width = '100%';
-                updateStep(step3, 'Anchor Confirmed (Block #238491001)', true);
-                showSuccess();
-            }, 4500);
+                    // Step 2: Hash Computation
+                    setTimeout(() => {
+                        progressBar.style.width = '70%';
+                        if (data.hash) {
+                            updateStep(step2, `Hash: ${data.hash.substring(0, 16)}...`, true);
+                        } else {
+                            updateStep(step2, 'Hash computation failed', false);
+                        }
+                        activateStep(step3);
+                    }, 1200);
+
+                    // Step 3: Final Result
+                    setTimeout(() => {
+                        progressBar.style.width = '100%';
+                        if (data.verified) {
+                            updateStep(step3, 'Integrity Confirmed ✓', true);
+                            showSuccess(data);
+                        } else {
+                            updateStep(step3, 'Verification Failed ✗', false);
+                            showFailure(data);
+                        }
+                    }, 1800);
+                })
+                .catch(error => {
+                    console.error('Verification error:', error);
+                    progressBar.style.width = '100%';
+                    progressBar.classList.remove('bg-brand-500');
+                    progressBar.classList.add('bg-red-500');
+                    updateStep(step1, 'Connection Error', false);
+                    showFailure({ error: 'Could not connect to verification server' });
+                });
 
             function updateStep(el, text, success) {
                 el.querySelector('span:first-child').innerText = text;
-                el.querySelector('span:first-child').classList.add('text-white');
+                el.querySelector('span:first-child').classList.add(success ? 'text-white' : 'text-red-400');
                 const dot = el.querySelector('.status-dot');
                 dot.classList.remove('bg-yellow-500', 'bg-gray-600', 'animate-pulse-fast');
-                dot.classList.add('bg-brand-500');
+                dot.classList.add(success ? 'bg-brand-500' : 'bg-red-500');
             }
 
             function activateStep(el) {
@@ -176,10 +239,42 @@
                 dot.classList.add('bg-yellow-500', 'animate-pulse-fast');
             }
 
-            function showSuccess() {
+            function showSuccess(data) {
                 finalCheck.classList.remove('opacity-0', 'scale-50');
                 finalCheck.classList.add('opacity-100', 'scale-100');
                 finalResult.classList.remove('hidden');
+                document.getElementById('success-state').classList.remove('hidden');
+
+                // Fill in the data
+                document.getElementById('result-hash').innerText = data.hash || '-';
+                document.getElementById('result-size').innerText = data.file_size ? `${(data.file_size / 1024).toFixed(1)} KB` : '-';
+            }
+
+            function showFailure(data) {
+                // Change icon to X
+                finalIcon.classList.remove('bg-brand-500', 'shadow-[0_0_20px_#22c55e]');
+                finalIcon.classList.add('bg-red-500', 'shadow-[0_0_20px_#ef4444]');
+                finalIcon.innerHTML = `<svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>`;
+
+                // Change glow to red
+                glowEffect.classList.remove('bg-brand-500');
+                glowEffect.classList.add('bg-red-500');
+
+                // Change progress bar to red
+                progressBar.classList.remove('bg-brand-500');
+                progressBar.classList.add('bg-red-500');
+
+                finalCheck.classList.remove('opacity-0', 'scale-50');
+                finalCheck.classList.add('opacity-100', 'scale-100');
+                finalResult.classList.remove('hidden');
+                document.getElementById('failure-state').classList.remove('hidden');
+
+                // Set error message
+                if (data.error) {
+                    document.getElementById('error-details').innerText = data.error;
+                }
             }
         });
     </script>
