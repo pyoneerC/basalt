@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verifying Asset | Basalt Protocol</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Share+Tech+Mono&display=swap"
+        rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['"Share Tech Mono"', 'monospace'],
+                    },
+                    colors: {
+                        brand: {
+                            500: '#22c55e',
+                            900: '#14532d',
+                        }
+                    },
+                    animation: {
+                        'pulse-fast': 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #050505;
+            color: #e5e5e5;
+        }
+
+        .bg-grid {
+            background-size: 50px 50px;
+            background-image:
+                linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        }
+    </style>
+</head>
+
+<body class="bg-grid min-h-screen flex flex-col items-center justify-center p-4">
+
+    <!-- Navbar Minimal -->
+    <nav class="fixed top-0 w-full p-6 flex justify-between items-center z-50">
+        <div class="flex items-center gap-2">
+            <div class="w-6 h-6 bg-brand-500 rounded-sm"></div>
+            <span class="font-mono font-bold tracking-widest text-white">BASALT</span>
+        </div>
+        <a href="/" class="text-xs font-mono text-gray-500 hover:text-white transition-colors">[ RETURN TO BASE ]</a>
+    </nav>
+
+    <!-- Main Verification Card -->
+    <div
+        class="w-full max-w-2xl bg-black/80 backdrop-blur-xl border border-white/10 rounded-2xl p-8 relative overflow-hidden shadow-2xl">
+
+        <!-- Status Indicator -->
+        <div class="absolute top-0 left-0 w-full h-1 bg-gray-800" id="progress-bar">
+            <div class="h-full bg-brand-500 w-0 transition-all duration-[3000ms] ease-out" id="progress-fill"></div>
+        </div>
+
+        <div class="flex flex-col items-center text-center space-y-8 mt-4">
+
+            <!-- Asset Preview (Mock for now, would be fetched from IPFS) -->
+            <div class="relative w-32 h-32 group">
+                <div
+                    class="absolute inset-0 bg-brand-500 blur-xl opacity-20 rounded-full group-hover:opacity-40 transition-opacity">
+                </div>
+                <div
+                    class="relative w-full h-full border-2 border-dashed border-gray-700 rounded-xl flex items-center justify-center bg-gray-900/50">
+                    <svg class="w-10 h-10 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                        </path>
+                    </svg>
+                    <!-- Overlay Checkmark (Hidden initially) -->
+                    <div id="final-check"
+                        class="absolute inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm rounded-xl opacity-0 scale-50 transition-all duration-500">
+                        <div
+                            class="w-12 h-12 bg-brand-500 rounded-full flex items-center justify-center shadow-[0_0_20px_#22c55e]">
+                            <svg class="w-6 h-6 text-black font-bold" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                                    d="M5 13l4 4L19 7"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Steps -->
+            <div class="w-full space-y-4 font-mono text-sm text-left">
+
+                <!-- Step 1 -->
+                <div class="flex items-center justify-between p-4 bg-white/5 rounded border border-white/5" id="step-1">
+                    <span class="text-gray-400">Fetching Asset from IPFS Gateway...</span>
+                    <span class="w-2 h-2 bg-yellow-500 rounded-full animate-pulse-fast status-dot"></span>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="flex items-center justify-between p-4 bg-white/5 rounded border border-white/5 opacity-50"
+                    id="step-2">
+                    <span class="text-gray-400">Verifying C2PA Signature...</span>
+                    <span class="w-2 h-2 bg-gray-600 rounded-full status-dot"></span>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="flex items-center justify-between p-4 bg-white/5 rounded border border-white/5 opacity-50"
+                    id="step-3">
+                    <span class="text-gray-400">Checking Solana Anchor (Mainnet)...</span>
+                    <span class="w-2 h-2 bg-gray-600 rounded-full status-dot"></span>
+                </div>
+            </div>
+
+            <!-- Final Result (Hidden) -->
+            <div id="final-result" class="hidden animate-fade-in-up">
+                <h2 class="text-2xl font-bold text-white mb-2">AUTHENTICITY CONFIRMED</h2>
+                <p class="text-brand-500 font-mono text-xs tracking-widest uppercase">Immutable Record Found</p>
+                <div class="mt-8 grid grid-cols-2 gap-4 text-xs font-mono text-gray-500">
+                    <div class="text-right">CID:</div>
+                    <div class="text-left text-white truncate">{{ cid }}</div>
+                    <div class="text-right whitespace-nowrap">BLOCK HEIGHT:</div>
+                    <div class="text-left text-white">238,491,001</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // Simulation Script
+        document.addEventListener('DOMContentLoaded', () => {
+            const progressBar = document.getElementById('progress-fill');
+            const step1 = document.getElementById('step-1');
+            const step2 = document.getElementById('step-2');
+            const step3 = document.getElementById('step-3');
+            const finalCheck = document.getElementById('final-check');
+            const finalResult = document.getElementById('final-result');
+
+            // Start
+            setTimeout(() => {
+                progressBar.style.width = '33%';
+                updateStep(step1, 'Asset Retrieved', true);
+                activateStep(step2);
+            }, 1000);
+
+            setTimeout(() => {
+                progressBar.style.width = '66%';
+                updateStep(step2, 'Signature Valid (RSA-2048)', true);
+                activateStep(step3);
+            }, 2500);
+
+            setTimeout(() => {
+                progressBar.style.width = '100%';
+                updateStep(step3, 'Anchor Confirmed (Block #238491001)', true);
+                showSuccess();
+            }, 4500);
+
+            function updateStep(el, text, success) {
+                el.querySelector('span:first-child').innerText = text;
+                el.querySelector('span:first-child').classList.add('text-white');
+                const dot = el.querySelector('.status-dot');
+                dot.classList.remove('bg-yellow-500', 'bg-gray-600', 'animate-pulse-fast');
+                dot.classList.add('bg-brand-500');
+            }
+
+            function activateStep(el) {
+                el.classList.remove('opacity-50');
+                const dot = el.querySelector('.status-dot');
+                dot.classList.remove('bg-gray-600');
+                dot.classList.add('bg-yellow-500', 'animate-pulse-fast');
+            }
+
+            function showSuccess() {
+                finalCheck.classList.remove('opacity-0', 'scale-50');
+                finalCheck.classList.add('opacity-100', 'scale-100');
+                finalResult.classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -90,13 +90,13 @@ def sign_with_c2pa(input_path, output_path):
     if not sign_cert or not private_key:
          raise Exception("Certificates missing. Set BASALT_CERT_PEM/BASALT_KEY_PEM env vars or ensure .pem files exist.")
         
-    # Use ES256 for EC keys (standard for C2PA)
+    # Use PS256 for RSA keys (matches setup_certs.py)
     try:
         info = C2paSignerInfo(
-            C2paSigningAlg.ES256,
+            C2paSigningAlg.PS256,
             sign_cert,
             private_key,
-            "http://timestamp.digicert.com" # Public TSA
+            "" # Disable TSA for self-signed certs
         )
         signer = Signer.from_info(info)
     except Exception as e:
@@ -177,6 +177,12 @@ def anchor_to_solana(ipfs_cid, file_hash):
 @app.get("/", response_class=HTMLResponse)
 async def read_root(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
+
+@app.get("/verify/{cid}", response_class=HTMLResponse)
+async def verify_page(request: Request, cid: str):
+    # In a real app, we would fetch metadata for this CID.
+    # For MVP, we simulate it via the template.
+    return templates.TemplateResponse("verify.html", {"request": request, "cid": cid})
 
 @app.post("/notarize")
 async def notarize(file: UploadFile = File(...)):
