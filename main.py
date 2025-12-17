@@ -12,7 +12,7 @@ from fastapi.staticfiles import StaticFiles
 from dotenv import load_dotenv
 
 # Crypto & Blockchain Libraries
-from c2pa import Builder, Signer
+from c2pa import Builder, Signer, C2paSignerInfo, C2paSigningAlg
 from solana.rpc.api import Client
 from solders.keypair import Keypair
 from solders.transaction import Transaction
@@ -30,7 +30,7 @@ SOLANA_RPC = "https://api.devnet.solana.com"
 
 # Setup Logging
 logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger("veritas")
+logger = logging.getLogger("basalt")
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
@@ -54,11 +54,10 @@ sender_keypair = get_solana_keypair()
 def sign_with_c2pa(input_path, output_path):
     """
     Injects a 'Digital Signature' into the image.
-    This proves the image was processed by 'Veritas'.
+    This proves the image was processed by 'Basalt'.
     """
     manifest_json = json.dumps({
-        "title": "Veritas Secured Asset",
-        "claim_generator": "Veritas_Protocol_v1",
+        "claim_generator": "Basalt_Protocol_v1",
         "assertions": [
             {
                 "label": "c2pa.actions",
@@ -66,23 +65,30 @@ def sign_with_c2pa(input_path, output_path):
             },
             {
                 "label": "stds.schema-org.CreativeWork",
-                "data": {"author": [{"@type": "Organization", "name": "Veritas Notary"}]}
+                "data": {"author": [{"@type": "Organization", "name": "Basalt Notary"}]}
             }
         ]
     })
     
-    # Check if certs exist
-    if not os.path.exists("my_cert.pem") or not os.path.exists("my_private_key.pem"):
-        raise Exception("Certificate or Private Key missing. Run openssl command.")
-
-    # Sign using the keys
-    # New C2PA Python API requires C2paSignerInfo
-    from c2pa import C2paSignerInfo, C2paSigningAlg
+    # Load Certs (File or Env)
+    sign_cert = None
+    private_key = None
     
-    with open("my_cert.pem", "rb") as f:
-        sign_cert = f.read()
-    with open("my_private_key.pem", "rb") as f:
-        private_key = f.read()
+    if os.path.exists("my_cert.pem") and os.path.exists("my_private_key.pem"):
+        with open("my_cert.pem", "rb") as f:
+            sign_cert = f.read()
+        with open("my_private_key.pem", "rb") as f:
+            private_key = f.read()
+    else:
+        # Fallback to Env Vars (for Vercel)
+        cert_env = os.getenv("BASALT_CERT_PEM")
+        key_env = os.getenv("BASALT_KEY_PEM")
+        if cert_env and key_env:
+            sign_cert = cert_env.encode('utf-8')
+            private_key = key_env.encode('utf-8')
+    
+    if not sign_cert or not private_key:
+         raise Exception("Certificates missing. Set BASALT_CERT_PEM/BASALT_KEY_PEM env vars or ensure .pem files exist.")
         
     # Use ES256 for EC keys (standard for C2PA)
     try:
@@ -128,14 +134,14 @@ def upload_to_ipfs(file_path):
 def anchor_to_solana(ipfs_cid, file_hash):
     """
     Writes the Evidence to the Blockchain.
-    Payload: "VERITAS:{CID}:{HASH}"
+    Payload: "BASALT:{CID}:{HASH}"
     """
     if not sender_keypair:
         logger.warning("Solana Keypair not available, mocking transaction")
         return "5_MOCK_SOLANA_TX_SIGNATURE_FOR_DEMO"
 
     # 1. Create the Payload (The Memo)
-    payload = f"VERITAS:{ipfs_cid}:{file_hash}"
+    payload = f"BASALT:{ipfs_cid}:{file_hash}"
     logger.info(f"Anchoring: {payload}")
     
     try:

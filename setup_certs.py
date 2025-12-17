@@ -10,13 +10,13 @@ def setup_pki():
     run_cmd("openssl ecparam -name prime256v1 -genkey -noout -out root_key.pem")
     
     # 2. Generate Root CA Certificate (Self-Signed)
-    run_cmd('openssl req -x509 -new -key root_key.pem -out root_cert.pem -days 365 -nodes -subj "/CN=Veritas Root CA" -config openssl.cnf -extensions v3_ca')
+    run_cmd('openssl req -x509 -new -key root_key.pem -out root_cert.pem -days 365 -nodes -subj "/CN=Basalt Root CA" -config openssl.cnf -extensions v3_ca')
     
     # 3. Generate Leaf Key (EC prime256v1)
     run_cmd("openssl ecparam -name prime256v1 -genkey -noout -out leaf_key.pem")
     
     # 4. Generate Leaf CSR
-    run_cmd('openssl req -new -key leaf_key.pem -out leaf.csr -nodes -subj "/CN=Veritas Protocol" -config openssl.cnf -extensions v3_req')
+    run_cmd('openssl req -new -key leaf_key.pem -out leaf.csr -nodes -subj "/CN=Basalt Protocol" -config openssl.cnf -extensions v3_req')
     
     # 5. Sign Leaf CSR with Root CA (Apply v3_leaf extensions)
     run_cmd("openssl x509 -req -in leaf.csr -CA root_cert.pem -CAkey root_key.pem -CAcreateserial -out leaf_cert.pem -days 365 -extfile openssl.cnf -extensions v3_leaf")

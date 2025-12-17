@@ -1,19 +1,19 @@
-# VERITAS PROTOCOL /// IMMUTABLE PROVENANCE ENGINE
+# BASALT PROTOCOL /// IMMUTABLE PROVENANCE ENGINE
 
 ![License](https://img.shields.io/badge/license-MIT-green) ![Status](https://img.shields.io/badge/status-operational-green) ![Solana](https://img.shields.io/badge/network-solana-purple) ![C2PA](https://img.shields.io/badge/standard-C2PA%20v1.3-blue)
 
-**Veritas** is an enterprise-grade provenance layer that anchors digital media to the Solana blockchain. By combining **C2PA cryptographic signing** with **IPFS decentralized storage** and **Solana timestamping**, Veritas creates an indisputable chain of custody for digital assets.
+**Basalt** is an enterprise-grade provenance layer that anchors digital media to the Solana blockchain. By combining **C2PA cryptographic signing** with **IPFS decentralized storage** and **Solana timestamping**, Basalt creates an indisputable chain of custody for digital assets.
 
 ---
 
 ## /// SYSTEM ARCHITECTURE
 
-The Veritas pipeline ensures that every asset processed is cryptographically bound to its creator and timestamped on a public ledger.
+The Basalt pipeline ensures that every asset processed is cryptographically bound to its creator and timestamped on a public ledger.
 
 ```mermaid
 sequenceDiagram
     participant Client as 📸 Client / Device
-    participant API as ⚡ Veritas API
+    participant API as ⚡ Basalt API
     participant C2PA as 🔐 C2PA Engine
     participant IPFS as 📦 IPFS Vault
     participant SOL as 🟣 Solana Timechain
@@ -50,14 +50,14 @@ sequenceDiagram
 Clone the repository and install the dependencies:
 
 ```bash
-git clone https://github.com/your-org/veritas-protocol.git
-cd veritas-protocol
+git clone https://github.com/your-org/basalt-protocol.git
+cd basalt-protocol
 pip install -r requirements.txt
 ```
 
 ### 2. Security Setup (PKI)
 
-Veritas requires a valid X.509 Certificate Authority chain to sign assets. For development, we provide a script to generate a compliant self-signed testing chain (Root CA -> Intermediate -> Leaf).
+Basalt requires a valid X.509 Certificate Authority chain to sign assets. For development, we provide a script to generate a compliant self-signed testing chain (Root CA -> Intermediate -> Leaf).
 
 ```bash
 # Generate EC Param keys and Certificates
@@ -85,7 +85,7 @@ Start the high-performance FastAPI server:
 uvicorn main:app --reload
 ```
 
-Access the **Veritas Console** at: `http://localhost:8000`
+Access the **Basalt Console** at: `http://localhost:8000`
 
 ---
 
@@ -131,4 +131,4 @@ Create admissible digital evidence with a mathematically provable chain of custo
 
 *This software is currently in **BETA**. While the cryptographic primitives are standard, do not use for high-value asset protection on Mainnet without a full security audit.*
 
-**Veritas Protocol Inc. © 2026**
+**Basalt Protocol Inc. © 2026**
