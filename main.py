@@ -55,11 +55,17 @@ sender_keypair = get_solana_keypair()
 
 # --- HELPER FUNCTIONS ---
 
-def sign_with_c2pa(input_path, output_path):
+def sign_with_c2pa(input_path, output_path, mime_type="image/jpeg"):
     """
-    Injects a 'Digital Signature' into the image.
-    This proves the image was processed by 'Basalt'.
+    Injects a 'Digital Signature' into the file.
+    This proves the file was processed by 'Basalt'.
     Uses the official c2pa-python callback signer approach.
+    
+    Supported MIME types:
+    - image/jpeg, image/png, image/tiff, image/webp, image/heic, image/avif
+    - video/mp4, video/quicktime
+    - audio/mpeg, audio/wav
+    - application/pdf
     """
     manifest_definition = {
         "claim_generator": "Basalt_Protocol_v1",
@@ -67,8 +73,8 @@ def sign_with_c2pa(input_path, output_path):
             "name": "Basalt_Protocol",
             "version": "1.0.0",
         }],
-        "format": "image/jpeg",
-        "title": "Basalt Verified Image",
+        "format": mime_type,
+        "title": "Basalt Verified Asset",
         "assertions": [
             {
                 "label": "c2pa.actions",
@@ -309,28 +315,82 @@ async def verify_asset(cid: str):
 @app.post("/notarize")
 async def notarize(file: UploadFile = File(...)):
     
-    # 1. Save Raw File (Use /tmp directory for Vercel/Lambda)
-    import tempfile
-    tmp_dir = tempfile.gettempdir()
+    # Supported file types and their MIME mappings
+    SUPPORTED_TYPES = {
+        # Images
+        ".jpg": "image/jpeg",
+        ".jpeg": "image/jpeg", 
+        ".png": "image/png",
+        ".tiff": "image/tiff",
+        ".tif": "image/tiff",
+        ".webp": "image/webp",
+        ".heic": "image/heic",
+        ".avif": "image/avif",
+        # Video
+        ".mp4": "video/mp4",
+        ".mov": "video/quicktime",
+        # Audio
+        ".mp3": "audio/mpeg",
+        ".wav": "audio/wav",
+        # Documents
+        ".pdf": "application/pdf",
+    }
     
-    temp_filename = os.path.join(tmp_dir, f"temp_{int(time.time())}.jpg")
-    signed_filename = os.path.join(tmp_dir, f"signed_{int(time.time())}.jpg")
+    # Get file extension
+    import tempfile
+    from pathlib import Path
+    
+    original_filename = file.filename or "unknown.jpg"
+    file_ext = Path(original_filename).suffix.lower()
+    
+    # Check if file type is supported
+    if file_ext not in SUPPORTED_TYPES:
+        return JSONResponse({
+            "error": f"Unsupported file type: {file_ext}. Supported: {', '.join(SUPPORTED_TYPES.keys())}"
+        }, status_code=400)
+    
+    mime_type = SUPPORTED_TYPES[file_ext]
+    
+    # Use /tmp directory for Vercel/Lambda
+    tmp_dir = tempfile.gettempdir()
+    timestamp = int(time.time())
+    temp_filename = os.path.join(tmp_dir, f"temp_{timestamp}{file_ext}")
+    signed_filename = os.path.join(tmp_dir, f"signed_{timestamp}{file_ext}")
     
     try:
-        # Load and sanitize image to JPG (Fixes potential PNG/format issues)
-        from PIL import Image
-        import io
-        
         content = await file.read()
-        image = Image.open(io.BytesIO(content))
-        if image.mode != 'RGB':
-            image = image.convert('RGB')
+        
+        # For images, sanitize to ensure clean format
+        if mime_type.startswith("image/"):
+            from PIL import Image
+            import io
             
-        # Save as clean JPG
-        image.save(temp_filename, "JPEG", quality=95)
+            image = Image.open(io.BytesIO(content))
+            
+            # Convert to RGB for JPEG (no alpha channel)
+            if file_ext in [".jpg", ".jpeg"] and image.mode != 'RGB':
+                image = image.convert('RGB')
+            
+            # Save in original format
+            if file_ext in [".jpg", ".jpeg"]:
+                image.save(temp_filename, "JPEG", quality=95)
+            elif file_ext == ".png":
+                image.save(temp_filename, "PNG")
+            elif file_ext in [".tiff", ".tif"]:
+                image.save(temp_filename, "TIFF")
+            elif file_ext == ".webp":
+                image.save(temp_filename, "WebP", quality=95)
+            else:
+                # For other image types, save raw bytes
+                with open(temp_filename, "wb") as f:
+                    f.write(content)
+        else:
+            # For non-image files (PDF, video, audio), save raw bytes
+            with open(temp_filename, "wb") as f:
+                f.write(content)
             
         # 2. C2PA Signing (The "Truth" Layer)
-        sign_with_c2pa(temp_filename, signed_filename)
+        sign_with_c2pa(temp_filename, signed_filename, mime_type)
         
         # 3. Calculate Hash of the SIGNED file (The "Fingerprint")
         with open(signed_filename, "rb") as f:
@@ -350,7 +410,8 @@ async def notarize(file: UploadFile = File(...)):
                 "ipfs_url": f"https://gateway.pinata.cloud/ipfs/{ipfs_cid}",
                 "sha256_hash": file_hash,
                 "solana_tx": f"https://explorer.solana.com/tx/{tx_sig}?cluster=devnet",
-                "c2pa_verification": "ACTIVE"
+                "c2pa_verification": "ACTIVE",
+                "file_type": mime_type
             }
         })
         
