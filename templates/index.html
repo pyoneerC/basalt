@@ -4,14 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Basalt Protocol | The Standard for Digital Truth</title>
+    <title>Basalt | Prove Your Media Is Real</title>
+    <meta name="description"
+        content="API infrastructure for cryptographically signing and timestamping digital media. C2PA signing, IPFS storage, blockchain anchoring.">
     <link rel="icon" type="image/png" href="/static/favicon.png">
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- HTMX -->
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Share+Tech+Mono&display=swap"
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
         rel="stylesheet">
 
     <script>
@@ -20,36 +20,13 @@
                 extend: {
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
-                        mono: ['"Share Tech Mono"', 'monospace'],
+                        mono: ['JetBrains Mono', 'monospace'],
                     },
                     colors: {
                         brand: {
-                            50: '#f0fdf4',
-                            100: '#dcfce7',
-                            500: '#22c55e', // Green-500
+                            400: '#4ade80',
+                            500: '#22c55e',
                             600: '#16a34a',
-                            900: '#14532d',
-                            accent: '#00ff41', // Hackers Green
-                        },
-                        dark: {
-                            900: '#050505',
-                            800: '#0a0a0a',
-                            700: '#171717',
-                        }
-                    },
-                    animation: {
-                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
-                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                        'scan': 'scanline 8s linear infinite',
-                    },
-                    keyframes: {
-                        fadeInUp: {
-                            '0%': { opacity: '0', transform: 'translateY(20px)' },
-                            '100%': { opacity: '1', transform: 'translateY(0)' },
-                        },
-                        scanline: {
-                            '0%': { backgroundPosition: '0 0' },
-                            '100%': { backgroundPosition: '0 100%' },
                         }
                     }
                 }
@@ -59,471 +36,707 @@
 
     <style>
         body {
-            background-color: #050505;
-            color: #e5e5e5;
-            overflow-x: hidden;
+            background-color: #09090b;
+            color: #fafafa;
         }
 
-        /* Subtle Grid Background */
         .bg-grid {
-            background-size: 50px 50px;
+            background-size: 40px 40px;
             background-image:
-                linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+                linear-gradient(to right, rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
         }
 
-        /* Glowing Text Utilities */
-        .text-glow {
-            text-shadow: 0 0 20px rgba(34, 197, 94, 0.5);
+        .code-block {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
         }
 
-        .glass-panel {
-            background: rgba(23, 23, 23, 0.6);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+        /* Scroll Animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
         }
 
-        /* Scanline Effect */
-        .scan-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.1) 50%);
-            background-size: 100% 4px;
-            pointer-events: none;
-            z-index: 50;
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
         }
 
-        .gradient-text {
-            background: linear-gradient(to right, #ffffff, #86efac);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .reveal-delay-1 {
+            transition-delay: 0.1s;
         }
 
+        .reveal-delay-2 {
+            transition-delay: 0.2s;
+        }
+
+        .reveal-delay-3 {
+            transition-delay: 0.3s;
+        }
+
+        /* Hero animation */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-hero {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .animate-hero-1 {
+            animation-delay: 0s;
+        }
+
+        .animate-hero-2 {
+            animation-delay: 0.1s;
+        }
+
+        .animate-hero-3 {
+            animation-delay: 0.2s;
+        }
+
+        .animate-hero-4 {
+            animation-delay: 0.3s;
+        }
+
+        /* Glow effect */
+        .glow {
+            box-shadow: 0 0 60px rgba(34, 197, 94, 0.15);
+        }
+
+        /* Flow line */
+        .flow-line {
+            background: linear-gradient(90deg, transparent, rgba(34, 197, 94, 0.3), transparent);
+            height: 2px;
+        }
+
+        /* Loader */
         .loader {
-            border: 3px solid rgba(34, 197, 94, 0.1);
+            border: 2px solid rgba(34, 197, 94, 0.2);
             border-left-color: #22c55e;
             border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            animation: spin 1s linear infinite;
+            width: 20px;
+            height: 20px;
+            animation: spin 0.8s linear infinite;
         }
 
         @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
+            to {
                 transform: rotate(360deg);
             }
         }
 
-        .logo-grayscale {
-            filter: grayscale(100%) opacity(0.6);
-            transition: all 0.3s;
+        /* Pulse dot */
+        @keyframes pulse-glow {
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4);
+            }
+
+            50% {
+                box-shadow: 0 0 0 8px rgba(34, 197, 94, 0);
+            }
         }
 
-        .logo-grayscale:hover {
-            filter: grayscale(0%) opacity(1);
+        .pulse-dot {
+            animation: pulse-glow 2s infinite;
         }
     </style>
 </head>
 
-<body class="antialiased bg-grid selection:bg-brand-500 selection:text-black">
-    <div class="scan-overlay"></div>
+<body class="antialiased bg-grid">
 
     <!-- Navigation -->
-    <nav class="fixed w-full z-40 top-0 transition-all duration-300 glass-panel border-b-0 border-white/5">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8">
-            <div class="flex items-center justify-between h-20">
-                <div class="flex items-center gap-3 group cursor-pointer">
-                    <div
-                        class="w-8 h-8 bg-brand-500 rounded-sm flex items-center justify-center transform group-hover:rotate-45 transition-transform duration-300">
-                        <div class="w-4 h-4 bg-black"></div>
+    <nav class="fixed w-full z-50 top-0 bg-black/80 backdrop-blur-xl border-b border-white/5">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex items-center justify-between h-16">
+                <a href="/" class="flex items-center gap-2.5">
+                    <div class="w-7 h-7 bg-brand-500 rounded flex items-center justify-center">
+                        <div class="w-3 h-3 bg-black rounded-sm"></div>
                     </div>
-                    <span
-                        class="font-mono text-xl font-bold tracking-widest text-white group-hover:text-brand-400 transition-colors">BASALT</span>
-                </div>
-                <div class="hidden md:flex items-center gap-8 text-sm font-light tracking-wide text-gray-400">
-                    <a href="#how-it-works" class="hover:text-white transition-colors">PLATORM</a>
-                    <a href="#developers" class="hover:text-white transition-colors">DEVELOPERS</a>
-                    <a href="#demo" class="hover:text-white transition-colors text-brand-400 font-bold">[ LIVE DEMO
-                        ]</a>
+                    <span class="font-semibold text-lg tracking-tight">Basalt</span>
+                </a>
+                <div class="hidden md:flex items-center gap-8 text-sm text-gray-400">
+                    <a href="#how-it-works" class="hover:text-white transition-colors">How It Works</a>
+                    <a href="#features" class="hover:text-white transition-colors">Features</a>
+                    <a href="#api" class="hover:text-white transition-colors">API</a>
+                    <a href="#demo"
+                        class="px-4 py-2 bg-brand-500 text-black font-medium rounded-lg hover:bg-brand-400 transition-all hover:shadow-lg hover:shadow-brand-500/20">Get
+                        Started Free</a>
                 </div>
             </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+    <!-- Hero -->
+    <section class="relative pt-32 pb-24 lg:pt-44 lg:pb-32 overflow-hidden">
+        <!-- Background glow -->
         <div
-            class="absolute top-0 right-0 -mr-40 -mt-40 w-[600px] h-[600px] bg-brand-500/10 rounded-full blur-[100px] animate-pulse-slow">
-        </div>
-        <div
-            class="absolute bottom-0 left-0 -ml-40 -mb-40 w-[400px] h-[400px] bg-blue-500/10 rounded-full blur-[100px]">
+            class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] bg-brand-500/5 rounded-full blur-[120px] pointer-events-none">
         </div>
 
-        <div class="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 text-center">
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-mono text-brand-400 mb-8 animate-fade-in-up"
-                style="animation-delay: 0.1s;">
-                <span class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span>
-                SYSTEM OPERATIONAL // V1.0.4
-            </div>
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="max-w-4xl">
+                <!-- Badge -->
+                <div
+                    class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-medium text-gray-400 mb-8 opacity-0 animate-hero animate-hero-1">
+                    <span class="w-1.5 h-1.5 rounded-full bg-brand-500 pulse-dot"></span>
+                    Deepfakes are now undetectable. Proof is the new trust.
+                </div>
 
-            <h1 class="text-5xl md:text-7xl font-bold tracking-tight mb-8 animate-fade-in-up"
-                style="animation-delay: 0.2s;">
-                <span class="block">Trust is no longer</span>
-                <span class="gradient-text">Assumed. It is Proven.</span>
-            </h1>
+                <!-- Headline -->
+                <h1
+                    class="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.05] mb-6 opacity-0 animate-hero animate-hero-2">
+                    If it's not signed,<br>
+                    <span class="text-gray-500">it didn't happen.</span>
+                </h1>
 
-            <p class="mt-6 text-lg md:text-xl text-gray-400 max-w-2xl mx-auto font-light leading-relaxed animate-fade-in-up"
-                style="animation-delay: 0.3s;">
-                The Basalt Protocol anchors digital media to the blockchain, establishing an immutable chain of custody
-                for every pixel, frame, and document.
-            </p>
+                <!-- Subheadline -->
+                <p
+                    class="text-lg md:text-xl text-gray-400 max-w-2xl mb-10 leading-relaxed opacity-0 animate-hero animate-hero-3">
+                    Stamp any media with <span class="text-white">cryptographic proof</span> that it's real,
+                    unedited, and timestamped — before AI makes trust impossible.
+                </p>
 
-            <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up"
-                style="animation-delay: 0.4s;">
-                <a href="#demo"
-                    class="w-full sm:w-auto px-8 py-4 bg-white text-black font-bold text-sm tracking-widest hover:bg-gray-200 transition-all transform hover:-translate-y-1 rounded-sm">
-                    START NOTARIZING
-                </a>
-                <a href="#how-it-works"
-                    class="w-full sm:w-auto px-8 py-4 border border-white/20 text-white font-mono text-sm hover:bg-white/5 transition-all rounded-sm flex items-center justify-center gap-2">
-                    HOW IT WORKS
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
-                    </svg>
-                </a>
+                <!-- CTAs -->
+                <div class="flex flex-col sm:flex-row gap-4 opacity-0 animate-hero animate-hero-4">
+                    <a href="#demo"
+                        class="group px-7 py-4 bg-brand-500 text-black font-semibold rounded-lg hover:bg-brand-400 transition-all hover:shadow-xl hover:shadow-brand-500/20 hover:-translate-y-0.5 text-center flex items-center justify-center gap-2">
+                        Notarize Your First File Free
+                        <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                        </svg>
+                    </a>
+                    <a href="#how-it-works"
+                        class="px-7 py-4 border border-white/20 text-white font-medium rounded-lg hover:bg-white/5 transition-all text-center">
+                        See How It Works
+                    </a>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Social Proof -->
-    <div class="border-y border-white/5 bg-white/[0.02]">
-        <div class="max-w-7xl mx-auto px-6 py-12">
-            <p class="text-center text-xs font-mono text-gray-600 mb-12 uppercase tracking-[0.2em]">Trusted Architecture
-                Components</p>
-            <div class="flex flex-wrap justify-center items-center gap-8 md:gap-16">
-                <!-- Solana -->
-                <a href="https://solana.com" target="_blank" class="opacity-60 hover:opacity-100 transition-opacity">
+    <!-- Trusted By / Infrastructure -->
+    <section class="border-y border-white/5 bg-black/40">
+        <div class="max-w-7xl mx-auto px-6 py-10">
+            <p class="text-center text-[11px] font-medium text-gray-600 mb-8 uppercase tracking-[0.15em]">Built on
+                production-grade infrastructure</p>
+            <div class="flex flex-wrap justify-center items-center gap-10 md:gap-16">
+                <a href="https://solana.com" target="_blank" class="opacity-40 hover:opacity-80 transition-opacity">
                     <img src="https://solana.com/src/img/branding/solanaLogo.png" alt="Solana"
                         class="h-5 w-auto brightness-0 invert">
                 </a>
-                <!-- C2PA / Content Authenticity -->
-                <a href="https://c2pa.org" target="_blank" class="opacity-60 hover:opacity-100 transition-opacity">
+                <a href="https://c2pa.org" target="_blank" class="opacity-40 hover:opacity-80 transition-opacity">
                     <img src="https://c2pa.org/wp-content/uploads/sites/33/2025/05/c2pa_logo.svg" alt="C2PA"
-                        class="h-8 w-auto brightness-0 invert"
-                        onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                    <span class="text-xl font-bold text-white hidden">C2PA</span>
+                        class="h-7 w-auto brightness-0 invert"
+                        onerror="this.outerHTML='<span class=\'text-sm font-semibold text-gray-400\'>C2PA</span>'">
                 </a>
-                <!-- IPFS -->
-                <a href="https://ipfs.tech" target="_blank" class="opacity-60 hover:opacity-100 transition-opacity">
+                <a href="https://ipfs.tech" target="_blank" class="opacity-40 hover:opacity-80 transition-opacity">
                     <img src="https://theblockchainacademy.com/wp-content/uploads/sites/17/2024/02/1_o5Q3503plQP12FtVSn0nXQ.png"
-                        alt="IPFS" class="h-8 w-auto brightness-0 invert"
-                        onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                    <span class="text-xl font-bold text-white hidden">IPFS</span>
+                        alt="IPFS" class="h-7 w-auto brightness-0 invert"
+                        onerror="this.outerHTML='<span class=\'text-sm font-semibold text-gray-400\'>IPFS</span>'">
                 </a>
-                <!-- DigiCert -->
-                <a href="https://digicert.com" target="_blank" class="opacity-60 hover:opacity-100 transition-opacity">
+                <a href="https://digicert.com" target="_blank" class="opacity-40 hover:opacity-80 transition-opacity">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/4/48/DigiCert_logo.svg" alt="DigiCert"
-                        class="h-6 w-auto brightness-0 invert"
-                        onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                    <span class="text-xl font-bold text-white hidden">DigiCert</span>
+                        class="h-5 w-auto brightness-0 invert"
+                        onerror="this.outerHTML='<span class=\'text-sm font-semibold text-gray-400\'>DigiCert</span>'">
                 </a>
-                <!-- Pinata -->
-                <a href="https://pinata.cloud" target="_blank" class="opacity-60 hover:opacity-100 transition-opacity">
+                <a href="https://pinata.cloud" target="_blank" class="opacity-40 hover:opacity-80 transition-opacity">
                     <img src="https://mintcdn.com/pinata/09jphG_rC0WCVTMW/logo/dark.svg?fit=max&auto=format&n=09jphG_rC0WCVTMW&q=85&s=2f6f678b7477b4f1137f017985dff40c"
-                        alt="Pinata" class="h-7 w-auto brightness-0 invert"
-                        onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                    <span class="text-xl font-bold text-white hidden">Pinata</span>
+                        alt="Pinata" class="h-6 w-auto brightness-0 invert"
+                        onerror="this.outerHTML='<span class=\'text-sm font-semibold text-gray-400\'>Pinata</span>'">
                 </a>
             </div>
         </div>
-    </div>
+    </section>
 
-    <!-- How It Works (The Engine) -->
-    <section id="how-it-works" class="py-24 relative">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8">
-            <div class="mb-16 md:mb-24">
-                <h2 class="text-3xl md:text-4xl font-bold mb-4">The Provenance Engine</h2>
-                <div class="w-20 h-1 bg-brand-500"></div>
-                <p class="mt-6 text-gray-400 max-w-xl">
-                    Basalt combines three layers of security to create a tamper-proof record.
+    <!-- How It Works - Visual Flow -->
+    <section id="how-it-works" class="py-28 relative">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-20 reveal">
+                <p class="text-sm font-medium text-brand-500 mb-3 uppercase tracking-wider">How It Works</p>
+                <h2 class="text-3xl md:text-5xl font-bold mb-4">Three layers. One API call.</h2>
+                <p class="text-gray-400 max-w-xl mx-auto">Upload a file, get back bulletproof proof of authenticity.</p>
+            </div>
+
+            <!-- Flow Diagram -->
+            <div class="relative max-w-5xl mx-auto">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-4 relative z-10 items-center">
+                    <!-- Step 1 -->
+                    <div class="reveal reveal-delay-1">
+                        <div
+                            class="bg-gradient-to-b from-white/[0.03] to-transparent border border-white/10 rounded-2xl p-8 text-center relative hover:border-brand-500/30 transition-colors">
+                            <div
+                                class="absolute -top-4 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-brand-500 text-black font-bold text-sm flex items-center justify-center">
+                                1</div>
+                            <div
+                                class="w-16 h-16 rounded-2xl bg-brand-500/10 flex items-center justify-center mx-auto mb-6 mt-2">
+                                <svg class="w-8 h-8 text-brand-500" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0l-4 4m4-4v12" />
+                                </svg>
+                            </div>
+                            <h3 class="font-semibold text-lg mb-2">Upload</h3>
+                            <p class="text-sm text-gray-400">Send any file via API or web</p>
+                            <p class="text-xs text-gray-600 mt-3 font-mono">JPG, PNG, PDF, MP4...</p>
+                        </div>
+                    </div>
+
+                    <!-- Arrow 1 (hidden on mobile) -->
+                    <div class="hidden md:flex absolute left-[30%] top-1/2 -translate-y-1/2 -translate-x-1/2 z-20">
+                        <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="reveal reveal-delay-2">
+                        <div
+                            class="bg-gradient-to-b from-white/[0.03] to-transparent border border-white/10 rounded-2xl p-8 text-center relative hover:border-blue-500/30 transition-colors">
+                            <div
+                                class="absolute -top-4 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-blue-500 text-white font-bold text-sm flex items-center justify-center">
+                                2</div>
+                            <div
+                                class="w-16 h-16 rounded-2xl bg-blue-500/10 flex items-center justify-center mx-auto mb-6 mt-2">
+                                <svg class="w-8 h-8 text-blue-500" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                        d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                </svg>
+                            </div>
+                            <h3 class="font-semibold text-lg mb-2">Sign & Anchor</h3>
+                            <p class="text-sm text-gray-400">C2PA + Solana blockchain</p>
+                            <p class="text-xs text-gray-600 mt-3 font-mono">&lt;2 seconds</p>
+                        </div>
+                    </div>
+
+                    <!-- Arrow 2 (hidden on mobile) -->
+                    <div class="hidden md:flex absolute left-[70%] top-1/2 -translate-y-1/2 -translate-x-1/2 z-20">
+                        <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="reveal reveal-delay-3">
+                        <div
+                            class="bg-gradient-to-b from-white/[0.03] to-transparent border border-white/10 rounded-2xl p-8 text-center relative hover:border-purple-500/30 transition-colors">
+                            <div
+                                class="absolute -top-4 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-purple-500 text-white font-bold text-sm flex items-center justify-center">
+                                3</div>
+                            <div
+                                class="w-16 h-16 rounded-2xl bg-purple-500/10 flex items-center justify-center mx-auto mb-6 mt-2">
+                                <svg class="w-8 h-8 text-purple-500" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                        d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                </svg>
+                            </div>
+                            <h3 class="font-semibold text-lg mb-2">Verify Forever</h3>
+                            <p class="text-sm text-gray-400">IPFS + shareable proof link</p>
+                            <p class="text-xs text-gray-600 mt-3 font-mono">Immutable</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Result -->
+            <div class="mt-16 text-center reveal">
+                <p class="text-gray-500 text-sm mb-4">The result</p>
+                <div class="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-white/5 border border-white/10">
+                    <span class="w-2 h-2 rounded-full bg-brand-500"></span>
+                    <span class="text-sm font-medium">Cryptographically signed</span>
+                    <span class="w-2 h-2 rounded-full bg-brand-500"></span>
+                    <span class="text-sm font-medium">Blockchain timestamped</span>
+                    <span class="w-2 h-2 rounded-full bg-brand-500"></span>
+                    <span class="text-sm font-medium">Permanently stored</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem/Solution -->
+    <section class="py-24 border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="max-w-3xl mx-auto text-center mb-16 reveal">
+                <h2 class="text-3xl md:text-4xl font-bold mb-6">The trust crisis is now your problem</h2>
+                <p class="text-lg text-gray-400">
+                    Every photo, video, and document will be questioned.
+                    <span class="text-white">"Is this AI?"</span> is the new default assumption.
                 </p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Step 1 -->
-                <div class="glass-panel p-8 rounded-xl hover:border-brand-500/50 transition-colors group">
-                    <div
-                        class="text-brand-500 font-mono text-5xl mb-6 opacity-30 group-hover:opacity-100 transition-opacity">
-                        01</div>
-                    <h3 class="text-xl font-bold mb-3 text-white">Cryptographic Signing</h3>
-                    <p class="text-gray-400 text-sm leading-relaxed">
-                        We inject a C2PA standard manifest implementation into the file metadata, signing it with X.509
-                        certificates.
-                    </p>
-                </div>
-                <!-- Step 2 -->
-                <div class="glass-panel p-8 rounded-xl hover:border-blue-500/50 transition-colors group">
-                    <div
-                        class="text-blue-500 font-mono text-5xl mb-6 opacity-30 group-hover:opacity-100 transition-opacity">
-                        02</div>
-                    <h3 class="text-xl font-bold mb-3 text-white">Decentralized Storage</h3>
-                    <p class="text-gray-400 text-sm leading-relaxed">
-                        The signed asset is pinned to IPFS (InterPlanetary File System), ensuring redundancy and
-                        censorship resistance.
-                    </p>
-                </div>
-                <!-- Step 3 -->
-                <div class="glass-panel p-8 rounded-xl hover:border-purple-500/50 transition-colors group">
-                    <div
-                        class="text-purple-500 font-mono text-5xl mb-6 opacity-30 group-hover:opacity-100 transition-opacity">
-                        03</div>
-                    <h3 class="text-xl font-bold mb-3 text-white">Blockchain Anchoring</h3>
-                    <p class="text-gray-400 text-sm leading-relaxed">
-                        A hash of the asset is written to the Solana blockchain, creating an indisputable timestamp of
-                        existence.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Interactive Demo Section -->
-    <section id="demo" class="py-24 relative bg-brand-900/10 border-y border-white/5">
-        <div class="absolute inset-0 bg-grid opacity-20"></div>
-
-        <div class="max-w-4xl mx-auto px-6 relative z-10">
-            <div class="text-center mb-12">
-                <span class="text-brand-400 font-mono text-sm tracking-widest">[ SYSTEM ACCESS ]</span>
-                <h2 class="text-3xl font-bold mt-2">Secure Your Assets Now</h2>
-                <p class="text-gray-400 mt-2">Upload a file to generate a notarized certificate.</p>
-            </div>
-
-            <!-- The App/Interface -->
-            <div class="glass-panel p-1 rounded-2xl shadow-2xl shadow-brand-500/10">
-                <div class="bg-black/80 rounded-xl p-8 md:p-12 relative overflow-hidden">
-
-                    <!-- Form -->
-                    <form id="uploadForm" hx-post="/notarize" hx-encoding="multipart/form-data" hx-swap="none"
-                        hx-indicator="#loading">
-                        <label class="block w-full cursor-pointer group relative">
-                            <div
-                                class="border-2 border-dashed border-gray-700 group-hover:border-brand-500 transition-all duration-500 p-16 text-center rounded-lg bg-white/5 group-hover:bg-white/[0.07]">
-                                <div
-                                    class="w-16 h-16 bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                                    <svg class="w-8 h-8 text-gray-400 group-hover:text-brand-400" fill="none"
-                                        stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0l-4 4m4-4v12"></path>
-                                    </svg>
-                                </div>
-                                <span class="text-lg text-white font-medium block mb-1">Drop evidence here</span>
-                                <span class="text-sm text-gray-500 font-mono">Images: JPG, PNG, TIFF, WebP | Video: MP4,
-                                    MOV | Audio: MP3, WAV | Docs: PDF</span>
-                                <div id="file-name"
-                                    class="mt-4 text-xs font-mono text-brand-400 hidden bg-brand-900/30 py-1 px-3 rounded inline-block border border-brand-500/30">
-                                </div>
-                            </div>
-                            <input type="file" name="file" class="hidden"
-                                onchange="const f=this.files[0]; if(f){const el=document.getElementById('file-name'); el.innerText = '[ LOADED: ' + f.name.toUpperCase() + ' ]'; el.classList.remove('hidden');}">
-                        </label>
-
-                        <div class="mt-8 flex flex-col items-center">
-                            <button type="submit"
-                                class="group relative inline-flex items-center justify-center px-8 py-4 text-base font-bold text-white transition-all duration-200 bg-brand-600 rounded-lg hover:bg-brand-500 hover:shadow-lg hover:shadow-brand-500/30 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 ring-offset-black w-full md:w-auto">
-                                <span
-                                    class="absolute inset-0 w-full h-full -mt-1 rounded-lg opacity-30 bg-gradient-to-b from-transparent via-transparent to-black"></span>
-                                <span class="relative flex items-center gap-2 uppercase tracking-widest">
-                                    Initialize Notarization
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                                    </svg>
-                                </span>
-                            </button>
-
-                            <!-- Loading State -->
-                            <div id="loading" class="htmx-indicator mt-6 flex items-center gap-3">
-                                <div class="loader"></div>
-                                <span class="font-mono text-xs text-brand-400 animate-pulse">ESTABLISHING
-                                    PROVENANCE...</span>
-                            </div>
-                        </div>
-                    </form>
-
-                    <!-- Results Area -->
-                    <div id="result-area" class="mt-8"></div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Developer Section -->
-    <section id="developers" class="py-24 bg-black">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="flex flex-col md:flex-row gap-12 items-center">
-                <div class="flex-1">
-                    <h2 class="text-3xl font-bold mb-6">Built for Integration</h2>
-                    <p class="text-gray-400 mb-8 leading-relaxed">
-                        Basalt is API-first. Integrate rigorous provenance checks into your existing CMS, DAM, or
-                        workflow with just a few lines of code.
-                    </p>
-                    <ul class="space-y-4 font-mono text-sm text-gray-400">
-                        <li class="flex items-center gap-3">
-                            <svg class="w-5 h-5 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>
-                            Python & Node.js SDKs
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+                <!-- Without -->
+                <div class="p-6 rounded-xl bg-red-950/10 border border-red-900/20 reveal reveal-delay-1">
+                    <div class="text-sm font-medium text-red-400/80 mb-4 flex items-center gap-2">
+                        <span>Without proof</span>
+                    </div>
+                    <ul class="space-y-3 text-sm text-gray-400">
+                        <li class="flex items-start gap-2">
+                            <span class="text-red-500/70 mt-0.5">×</span>
+                            Anyone can claim your media is fake
                         </li>
-                        <li class="flex items-center gap-3">
-                            <svg class="w-5 h-5 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>
-                            Webhooks for async processing
+                        <li class="flex items-start gap-2">
+                            <span class="text-red-500/70 mt-0.5">×</span>
+                            No way to prove when it was created
                         </li>
-                        <li class="flex items-center gap-3">
-                            <svg class="w-5 h-5 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>
-                            White-label verification pages
+                        <li class="flex items-start gap-2">
+                            <span class="text-red-500/70 mt-0.5">×</span>
+                            Evidence lost when servers go down
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-red-500/70 mt-0.5">×</span>
+                            Metadata is trivially spoofed
                         </li>
                     </ul>
                 </div>
-                <div class="flex-1 w-full">
-                    <div
-                        class="bg-gray-900 rounded-lg p-6 border border-white/10 shadow-2xl font-mono text-xs md:text-sm overflow-x-auto">
-                        <div class="flex gap-2 mb-4">
-                            <div class="w-3 h-3 rounded-full bg-red-500"></div>
-                            <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
-                            <div class="w-3 h-3 rounded-full bg-green-500"></div>
-                        </div>
-                        <pre class="text-gray-300">
-<span class="text-purple-400">import</span> basalt
-
-<span class="text-gray-500"># Initialize Client</span>
-client = basalt.Client(api_key=<span class="text-green-400">"b_live_..."</span>)
-
-<span class="text-gray-500"># Sign & Anchor</span>
-evidence = client.notarize(
-    file=<span class="text-green-400">"cctv_footage_04.mp4"</span>,
-    meta={
-        <span class="text-green-400">"location"</span>: <span class="text-green-400">"Sector 7"</span>,
-        <span class="text-green-400">"author"</span>: <span class="text-green-400">"SecCorp_Device_A"</span>
-    }
-)
-
-<span class="text-blue-400">print</span>(evidence.solana_tx)
-<span class="text-gray-500"># > "2zN8...3jK9"</span>
-</pre>
+                <!-- With -->
+                <div class="p-6 rounded-xl bg-brand-950/10 border border-brand-900/20 reveal reveal-delay-2">
+                    <div class="text-sm font-medium text-brand-400/80 mb-4 flex items-center gap-2">
+                        <span>With Basalt</span>
                     </div>
+                    <ul class="space-y-3 text-sm text-gray-400">
+                        <li class="flex items-start gap-2">
+                            <span class="text-brand-500/70 mt-0.5">✓</span>
+                            Unforgeable cryptographic signature
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-brand-500/70 mt-0.5">✓</span>
+                            Blockchain-verified timestamp
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-brand-500/70 mt-0.5">✓</span>
+                            Decentralized, censorship-resistant storage
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-brand-500/70 mt-0.5">✓</span>
+                            Industry-standard C2PA format
+                        </li>
+                    </ul>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features" class="py-24 border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Everything you need</h2>
+                <p class="text-gray-400">Enterprise-grade media authentication in one API.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                <div
+                    class="p-6 rounded-xl border border-white/5 bg-white/[0.01] hover:border-white/10 transition-colors reveal reveal-delay-1">
+                    <div class="w-10 h-10 rounded-lg bg-brand-500/10 flex items-center justify-center mb-4">
+                        <svg class="w-5 h-5 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                        </svg>
+                    </div>
+                    <h3 class="font-semibold mb-2">C2PA Signing</h3>
+                    <p class="text-sm text-gray-500">Industry-standard content credentials embedded directly into files.
+                    </p>
+                </div>
+
+                <div
+                    class="p-6 rounded-xl border border-white/5 bg-white/[0.01] hover:border-white/10 transition-colors reveal reveal-delay-2">
+                    <div class="w-10 h-10 rounded-lg bg-blue-500/10 flex items-center justify-center mb-4">
+                        <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 7v10c0 2.21 3.58 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.58 4 8 4s8-1.79 8-4M4 7c0-2.21 3.58-4 8-4s8 1.79 8 4" />
+                        </svg>
+                    </div>
+                    <h3 class="font-semibold mb-2">IPFS Storage</h3>
+                    <p class="text-sm text-gray-500">Decentralized, content-addressed storage. No single point of
+                        failure.</p>
+                </div>
+
+                <div
+                    class="p-6 rounded-xl border border-white/5 bg-white/[0.01] hover:border-white/10 transition-colors reveal reveal-delay-3">
+                    <div class="w-10 h-10 rounded-lg bg-purple-500/10 flex items-center justify-center mb-4">
+                        <svg class="w-5 h-5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                    </div>
+                    <h3 class="font-semibold mb-2">Solana Anchoring</h3>
+                    <p class="text-sm text-gray-500">$0.0001/tx. Sub-second finality. 65k TPS capacity.</p>
+                </div>
+
+                <div
+                    class="p-6 rounded-xl border border-white/5 bg-white/[0.01] hover:border-white/10 transition-colors reveal">
+                    <div class="w-10 h-10 rounded-lg bg-orange-500/10 flex items-center justify-center mb-4">
+                        <svg class="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                        </svg>
+                    </div>
+                    <h3 class="font-semibold mb-2">REST API</h3>
+                    <p class="text-sm text-gray-500">One endpoint. Any language. Integrate in minutes.</p>
+                </div>
+
+                <div
+                    class="p-6 rounded-xl border border-white/5 bg-white/[0.01] hover:border-white/10 transition-colors reveal">
+                    <div class="w-10 h-10 rounded-lg bg-pink-500/10 flex items-center justify-center mb-4">
+                        <svg class="w-5 h-5 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                    <h3 class="font-semibold mb-2">Multi-Format</h3>
+                    <p class="text-sm text-gray-500">Images, video, audio, PDFs. All major formats supported.</p>
+                </div>
+
+                <div
+                    class="p-6 rounded-xl border border-white/5 bg-white/[0.01] hover:border-white/10 transition-colors reveal">
+                    <div class="w-10 h-10 rounded-lg bg-cyan-500/10 flex items-center justify-center mb-4">
+                        <svg class="w-5 h-5 text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                        </svg>
+                    </div>
+                    <h3 class="font-semibold mb-2">Verification Pages</h3>
+                    <p class="text-sm text-gray-500">Shareable links anyone can use to verify authenticity.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- API Section -->
+    <section id="api" class="py-24 border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div class="reveal">
+                    <p class="text-sm font-medium text-brand-500 mb-3 uppercase tracking-wider">Developer-First</p>
+                    <h2 class="text-3xl md:text-4xl font-bold mb-6">One API call.<br>Full provenance.</h2>
+                    <p class="text-gray-400 mb-8 leading-relaxed">
+                        Integrate media authentication into any workflow.
+                        Upload a file, get back a signed asset with blockchain proof.
+                    </p>
+                    <a href="#demo" class="inline-flex items-center gap-2 text-brand-500 font-medium hover:underline">
+                        Try it now
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </a>
+                </div>
+
+                <div
+                    class="code-block rounded-xl p-6 font-mono text-sm overflow-x-auto border border-white/10 reveal reveal-delay-1">
+                    <div class="flex items-center gap-2 mb-4 text-xs text-gray-500">
+                        <span class="w-3 h-3 rounded-full bg-red-500/50"></span>
+                        <span class="w-3 h-3 rounded-full bg-yellow-500/50"></span>
+                        <span class="w-3 h-3 rounded-full bg-green-500/50"></span>
+                        <span class="ml-2">terminal</span>
+                    </div>
+                    <pre class="text-gray-300"><span class="text-gray-500">$</span> <span class="text-purple-400">curl</span> <span class="text-yellow-400">-X POST</span> <span class="text-green-400">/notarize</span> \
+    <span class="text-yellow-400">-F</span> <span class="text-green-400">"file=@evidence.jpg"</span>
+
+<span class="text-gray-500"># Response</span>
+{
+  <span class="text-blue-400">"status"</span>: <span class="text-green-400">"SECURED"</span>,
+  <span class="text-blue-400">"evidence"</span>: {
+    <span class="text-blue-400">"ipfs_cid"</span>: <span class="text-green-400">"Qm..."</span>,
+    <span class="text-blue-400">"sha256_hash"</span>: <span class="text-green-400">"a1b2..."</span>,
+    <span class="text-blue-400">"solana_tx"</span>: <span class="text-green-400">"5vR..."</span>,
+    <span class="text-blue-400">"c2pa"</span>: <span class="text-green-400">"ACTIVE"</span>
+  }
+}</pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Use Cases -->
+    <section class="py-24 border-t border-white/5 bg-gradient-to-b from-transparent to-black/50">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Built for enterprise workflows</h2>
+            </div>
+
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="p-5 rounded-lg border border-white/5 bg-white/[0.01] reveal reveal-delay-1">
+                    <div class="text-2xl mb-3">⚖️</div>
+                    <h3 class="font-semibold text-sm mb-1">Legal & eDiscovery</h3>
+                    <p class="text-xs text-gray-500">Court-ready timestamps</p>
+                </div>
+                <div class="p-5 rounded-lg border border-white/5 bg-white/[0.01] reveal reveal-delay-2">
+                    <div class="text-2xl mb-3">📰</div>
+                    <h3 class="font-semibold text-sm mb-1">Media & News</h3>
+                    <p class="text-xs text-gray-500">Prove authenticity</p>
+                </div>
+                <div class="p-5 rounded-lg border border-white/5 bg-white/[0.01] reveal reveal-delay-3">
+                    <div class="text-2xl mb-3">🏥</div>
+                    <h3 class="font-semibold text-sm mb-1">Insurance</h3>
+                    <p class="text-xs text-gray-500">Fraud prevention</p>
+                </div>
+                <div class="p-5 rounded-lg border border-white/5 bg-white/[0.01] reveal">
+                    <div class="text-2xl mb-3">📹</div>
+                    <h3 class="font-semibold text-sm mb-1">Security</h3>
+                    <p class="text-xs text-gray-500">Chain of custody</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo Section -->
+    <section id="demo" class="py-28 border-t border-white/5 relative">
+        <div class="absolute inset-0 bg-gradient-to-b from-brand-950/10 to-transparent pointer-events-none"></div>
+        <div class="max-w-3xl mx-auto px-6 relative z-10">
+            <div class="text-center mb-12 reveal">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Try it now</h2>
+                <p class="text-gray-400">Upload any file. Get cryptographic proof in seconds.</p>
+            </div>
+
+            <div class="rounded-2xl border border-white/10 bg-black/60 backdrop-blur-sm p-8 reveal reveal-delay-1">
+                <form id="uploadForm" hx-post="/notarize" hx-encoding="multipart/form-data" hx-swap="none"
+                    hx-indicator="#loading">
+                    <label class="block w-full cursor-pointer">
+                        <div
+                            class="border border-dashed border-white/20 hover:border-brand-500/50 transition-all p-12 text-center rounded-xl hover:bg-white/[0.02]">
+                            <div
+                                class="w-14 h-14 rounded-full bg-white/5 flex items-center justify-center mx-auto mb-4">
+                                <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0l-4 4m4-4v12"></path>
+                                </svg>
+                            </div>
+                            <span class="text-sm text-gray-300 block mb-1">Drop file or click to upload</span>
+                            <span class="text-xs text-gray-600 font-mono">JPG, PNG, TIFF, WebP, MP4, MOV, MP3, WAV,
+                                PDF</span>
+                            <div id="file-name" class="mt-3 text-xs font-mono text-brand-400 hidden"></div>
+                        </div>
+                        <input type="file" name="file" class="hidden"
+                            onchange="const f=this.files[0]; if(f){const el=document.getElementById('file-name'); el.innerText=f.name; el.classList.remove('hidden');}">
+                    </label>
+
+                    <button type="submit"
+                        class="mt-6 w-full py-3.5 bg-brand-500 text-black font-semibold rounded-xl hover:bg-brand-400 transition-all hover:shadow-lg hover:shadow-brand-500/20 flex items-center justify-center gap-2">
+                        Notarize Now — Free
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                        </svg>
+                    </button>
+
+                    <div id="loading" class="htmx-indicator mt-4 flex items-center justify-center gap-2">
+                        <div class="loader"></div>
+                        <span class="text-xs text-gray-500">Processing...</span>
+                    </div>
+                </form>
+
+                <div id="result-area" class="mt-6"></div>
+            </div>
+
+            <p class="text-center text-xs text-gray-600 mt-6">No account required. No credit card. Files are stored
+                permanently on IPFS.</p>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="py-24 border-t border-white/5">
+        <div class="max-w-3xl mx-auto px-6 text-center reveal">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">Ready to prove authenticity?</h2>
+            <p class="text-gray-400 mb-8">Start authenticating your media today. Free to try.</p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="#demo"
+                    class="px-8 py-3.5 bg-brand-500 text-black font-semibold rounded-lg hover:bg-brand-400 transition-all hover:shadow-lg hover:shadow-brand-500/20">
+                    Get Started Free
+                </a>
+                <a href="/contact"
+                    class="px-8 py-3.5 border border-white/20 font-medium rounded-lg hover:bg-white/5 transition-all">
+                    Talk to Sales
+                </a>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="border-t border-white/10 py-12 bg-black">
-        <div
-            class="max-w-7xl mx-auto px-6 text-center md:text-left flex flex-col md:flex-row justify-between items-center gap-6">
-            <div>
-                <span class="font-mono text-xl font-bold text-white tracking-widest">BASALT</span>
-                <p class="text-xs text-gray-600 mt-2">© 2026 Basalt Protocol Inc.</p>
+    <footer class="border-t border-white/5 py-12">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-2">
+                <div class="w-6 h-6 bg-brand-500 rounded flex items-center justify-center">
+                    <div class="w-2.5 h-2.5 bg-black rounded-sm"></div>
+                </div>
+                <span class="font-semibold">Basalt</span>
             </div>
-            <div class="flex gap-8 text-sm text-gray-500 font-light">
+            <div class="flex gap-8 text-sm text-gray-500">
                 <a href="/privacy" class="hover:text-white transition-colors">Privacy</a>
                 <a href="/terms" class="hover:text-white transition-colors">Terms</a>
                 <a href="/contact" class="hover:text-white transition-colors">Contact</a>
             </div>
+            <div class="text-xs text-gray-600">© 2025 Basalt Protocol</div>
         </div>
     </footer>
 
-    <!-- LOGIC SCRIPT -->
+    <!-- Scripts -->
     <script>
+        // Scroll reveal animation
+        const revealElements = document.querySelectorAll('.reveal');
+        const revealOnScroll = () => {
+            revealElements.forEach(el => {
+                const rect = el.getBoundingClientRect();
+                const isVisible = rect.top < window.innerHeight - 100;
+                if (isVisible) el.classList.add('active');
+            });
+        };
+        window.addEventListener('scroll', revealOnScroll);
+        window.addEventListener('load', revealOnScroll);
+
+        // HTMX response handler
         document.body.addEventListener('htmx:afterRequest', function (evt) {
             if (evt.detail.successful) {
                 try {
                     const response = JSON.parse(evt.detail.xhr.response);
                     const resultArea = document.getElementById('result-area');
-                    const loadingIndicator = document.getElementById('loading');
-
-                    // Force hide loading
-                    loadingIndicator.classList.add('hidden');
+                    document.getElementById('loading').classList.add('hidden');
 
                     if (response.error) {
-                        resultArea.innerHTML = `
-                            <div class="bg-red-900/20 border border-red-500/50 p-6 rounded-lg text-center animate-fade-in-up">
-                                <span class="text-red-500 font-bold block mb-2">Detailed Error Log</span>
-                                <span class="font-mono text-red-200 text-sm">${response.error}</span>
-                            </div>
-                        `;
+                        resultArea.innerHTML = `<div class="p-4 rounded-lg bg-red-950/30 border border-red-900/30 text-sm text-red-400">${response.error}</div>`;
                     } else {
                         const e = response.evidence;
                         resultArea.innerHTML = `
-                            <div class="bg-brand-900/10 border border-brand-500/30 rounded-xl p-8 animate-fade-in-up backdrop-blur-sm relative overflow-hidden">
-                                <div class="absolute top-0 right-0 p-4 opacity-20">
-                                    <svg class="w-32 h-32 text-brand-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+                            <div class="p-6 rounded-xl bg-brand-950/20 border border-brand-900/30">
+                                <div class="flex items-center gap-2 mb-4">
+                                    <span class="w-2 h-2 rounded-full bg-brand-500 pulse-dot"></span>
+                                    <span class="text-sm font-medium text-brand-400">Notarized successfully</span>
                                 </div>
-                                
-                                <div class="relative z-10">
-                                    <div class="flex items-center gap-3 mb-6">
-                                        <div class="h-3 w-3 bg-brand-500 rounded-full animate-pulse shadow-[0_0_10px_#22c55e]"></div>
-                                        <h3 class="text-white text-xl font-bold tracking-wide">CERTIFICATE GENERATED</h3>
+                                <div class="space-y-2 text-xs font-mono mb-6">
+                                    <div class="flex justify-between py-2 border-b border-white/5">
+                                        <span class="text-gray-500">SHA-256</span>
+                                        <span class="text-gray-400 truncate max-w-[180px]">${e.sha256_hash}</span>
                                     </div>
-
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm font-mono">
-                                        <div class="bg-black/40 p-4 rounded border border-white/5">
-                                            <span class="block text-gray-500 text-xs mb-1">ASSET HASH (SHA-256)</span>
-                                            <span class="text-brand-400 break-all">${e.sha256_hash}</span>
-                                        </div>
-                                        <div class="bg-black/40 p-4 rounded border border-white/5">
-                                            <span class="block text-gray-500 text-xs mb-1">C2PA SIGNATURE</span>
-                                            <span class="text-green-500 flex items-center gap-2">
-                                                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-                                                VALID (ES256)
-                                            </span>
-                                        </div>
+                                    <div class="flex justify-between py-2 border-b border-white/5">
+                                        <span class="text-gray-500">CID</span>
+                                        <span class="text-gray-400 truncate max-w-[180px]">${e.ipfs_cid}</span>
                                     </div>
-
-                                    <div class="flex flex-col gap-4 mt-8">
-                                        <!-- Primary CTA: Verify on Basalt -->
-                                        <a href="/verify/${e.ipfs_cid}" class="w-full py-4 px-6 rounded-lg bg-brand-600 hover:bg-brand-500 border border-brand-400/50 text-white font-bold text-center flex items-center justify-center gap-3 transition-all hover:shadow-lg hover:shadow-brand-500/30 hover:-translate-y-0.5">
-                                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
-                                            View Verification Page
-                                        </a>
-                                        
-                                        <!-- Secondary Actions -->
-                                        <div class="flex flex-col sm:flex-row gap-3">
-                                            <a href="${e.solana_tx}" target="_blank" class="flex-1 py-3 px-4 rounded bg-purple-600/20 border border-purple-500/50 text-purple-300 hover:bg-purple-600/30 transition text-center flex items-center justify-center gap-2 text-sm">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                                                On-Chain Proof
-                                            </a>
-                                            <a href="${e.ipfs_url}" target="_blank" class="flex-1 py-3 px-4 rounded bg-blue-600/20 border border-blue-500/50 text-blue-300 hover:bg-blue-600/30 transition text-center flex items-center justify-center gap-2 text-sm">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.58 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.58 4 8 4s8-1.79 8-4M4 7c0-2.21 3.58-4 8-4s8 1.79 8 4m0 5c0 2.21-3.58 4-8 4s-8-1.79-8-4"></path></svg>
-                                                IPFS Vault
-                                            </a>
-                                            <a href="https://contentcredentials.org/verify" target="_blank" class="flex-1 py-3 px-4 rounded bg-white/5 border border-white/20 text-white hover:bg-white/10 transition text-center flex items-center justify-center gap-2 text-sm">
-                                                C2PA Verify
-                                            </a>
-                                        </div>
-                                    </div>
+                                </div>
+                                <div class="flex gap-3">
+                                    <a href="/verify/${e.ipfs_cid}" class="flex-1 py-2.5 bg-brand-600 hover:bg-brand-500 text-white text-center text-sm font-medium rounded-lg transition-colors">Verify</a>
+                                    <a href="${e.solana_tx}" target="_blank" class="flex-1 py-2.5 border border-white/10 text-center text-sm hover:bg-white/5 rounded-lg transition-colors">Blockchain</a>
+                                    <a href="${e.ipfs_url}" target="_blank" class="flex-1 py-2.5 border border-white/10 text-center text-sm hover:bg-white/5 rounded-lg transition-colors">Download</a>
                                 </div>
                             </div>
                         `;
                     }
-                } catch (e) {
-                    console.error(e);
-                }
+                } catch (e) { console.error(e); }
             }
         });
     </script>
