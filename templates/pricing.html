@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing | Basalt</title>
+    <meta name="description" content="Simple, transparent pricing. Start free, scale as you grow.">
+    <link rel="icon" type="image/png" href="/static/favicon.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        brand: { 400: '#4ade80', 500: '#22c55e', 600: '#16a34a' }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #09090b;
+            color: #fafafa;
+        }
+
+        .pricing-gradient {
+            background: radial-gradient(ellipse at top, rgba(34, 197, 94, 0.08) 0%, transparent 60%);
+        }
+    </style>
+</head>
+
+<body class="antialiased">
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 top-0 bg-black/80 backdrop-blur-xl border-b border-white/5">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex items-center justify-between h-16">
+                <a href="/" class="flex items-center gap-2.5">
+                    <div class="w-7 h-7 bg-brand-500 rounded flex items-center justify-center">
+                        <div class="w-3 h-3 bg-black rounded-sm"></div>
+                    </div>
+                    <span class="font-semibold text-lg">Basalt</span>
+                </a>
+                <div class="flex items-center gap-6 text-sm">
+                    <a href="/" class="text-gray-400 hover:text-white transition-colors">Home</a>
+                    <a href="/login" class="text-gray-400 hover:text-white transition-colors">Login</a>
+                    <a href="/signup"
+                        class="px-4 py-2 bg-brand-500 text-black font-medium rounded-lg hover:bg-brand-400 transition-colors">Get
+                        Started</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-32 pb-24 pricing-gradient">
+        <div class="max-w-6xl mx-auto px-6">
+            <!-- Header -->
+            <div class="text-center mb-6">
+                <h1 class="text-4xl md:text-5xl font-bold mb-4">Simple, transparent pricing</h1>
+                <p class="text-xl text-gray-400 max-w-2xl mx-auto">
+                    Start free. Upgrade when you need more. No surprises.
+                </p>
+            </div>
+
+            <!-- Billing Toggle -->
+            <div class="flex items-center justify-center gap-4 mb-12">
+                <span class="text-sm text-gray-400" id="monthly-label">Monthly</span>
+                <button id="billing-toggle" onclick="toggleBilling()"
+                    class="relative w-14 h-7 bg-white/10 rounded-full transition-colors">
+                    <div id="toggle-dot"
+                        class="absolute top-1 left-1 w-5 h-5 bg-white rounded-full transition-transform"></div>
+                </button>
+                <span class="text-sm text-gray-400" id="annual-label">
+                    Annual <span class="text-brand-400 font-medium">(Save 20%)</span>
+                </span>
+            </div>
+
+            <!-- Pricing Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-12">
+                <!-- Free -->
+                <div class="relative p-8 rounded-2xl border border-white/10 bg-white/[0.02] flex flex-col">
+                    <div class="mb-6">
+                        <h3 class="text-xl font-semibold mb-1">Starter</h3>
+                        <p class="text-sm text-gray-500">For evaluation</p>
+                    </div>
+                    <div class="mb-2">
+                        <span class="text-5xl font-bold">$0</span>
+                    </div>
+                    <p class="text-sm text-gray-500 mb-6">14-day trial</p>
+
+                    <div class="border-t border-white/5 pt-6 mb-6">
+                        <p class="text-xs text-gray-500 uppercase tracking-wider mb-4">What's included</p>
+                        <ul class="space-y-3">
+                            <li class="flex items-start gap-3 text-sm">
+                                <svg class="w-5 h-5 text-brand-500 flex-shrink-0 mt-0.5" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span><strong>5</strong> notarizations total</span>
+                            </li>
+                            <li class="flex items-start gap-3 text-sm">
+                                <svg class="w-5 h-5 text-brand-500 flex-shrink-0 mt-0.5" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span>C2PA cryptographic signing</span>
+                            </li>
+                            <li class="flex items-start gap-3 text-sm">
+                                <svg class="w-5 h-5 text-brand-500 flex-shrink-0 mt-0.5" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span>IPFS permanent storage</span>
+                            </li>
+                            <li class="flex items-start gap-3 text-sm">
+                                <svg class="w-5 h-5 text-brand-500 flex-shrink-0 mt-0.5" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span>Solana blockchain anchoring</span>
+                            </li>
+                            <li class="flex items-start gap-3 text-sm">
+                                <svg class="w-5 h-5 text-brand-500 flex-shrink-0 mt-0.5" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span>Shareable verification pages</span>
+                            </li>
+                            <li class="flex items-start gap-3 text-sm text-gray-500">
+                                <svg class="w-5 h-5 text-gray-600 flex-shrink-0 mt-0.5" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                                <span>REST API access</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="mt-auto">
+                        <a href="/signup"
+                            class="block w-full py-3.5 text-center border border-white/20 rounded-xl font-medium hover:bg-white/5 transition-all">
+                            Get Started Free
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Pro (Popular) -->
+                <div
+                    class="relative p-8 rounded-2xl border-2 border-brand-500 bg-gradient-to-b from-brand-500/10 to-transparent flex flex-col">
+                    <div
+                        class="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 bg-brand-500 text-black text-xs font-bold rounded-full uppercase tracking-wider">
+                        Most Popular
+                    </div>
+                    <div class="mb-6">
+                        <h3 class="text-xl font-semibold mb-1">Pro</h3>
+                        <p class="text-sm text-gray-500">For teams and agencies</p>
+                    </div>
+                    <div class="mb-2">
+                        <span class="text-5xl font-bold" id="pro-price">$99</span>
+                        <span class="text-gray-500" id="pro-period">/month</span>
+                    </div>
+                    <p class="text-sm text-gray-500 mb-6" id="pro-subtext">$0.40 per notarization</p>
+
+                    <div class="border-t border-brand-500/20 pt-6 mb-6">
+                        <p class="text-xs text-gray-500 uppercase tracking-wider mb-4">Everything in Free, plus</p>
+                        <ul class="space-y-3">
+                            <li class="flex items-start gap-3 text-sm">
+                                <svg class="w-5 h-5 text-brand-500 flex-shrink-0 mt-0.5" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span><strong>250</strong> notarizations/month</span>
+                            </li>
+                            <li class="flex items-start gap-3 text-sm">
+                                <svg class="w-5 h-5 text-brand-500 flex-shrink-0 mt-0.5" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span><strong>REST API</strong> access</span>
+                            </li>
+                            <li class="flex items-start gap-3 text-sm">
+                                <svg class="w-5 h-5 text-brand-500 flex-shrink-0 mt-0.5" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span>API key management</span>
+                            </li>
+                            <li class="flex items-start gap-3 text-sm">
+                                <svg class="w-5 h-5 text-brand-500 flex-shrink-0 mt-0.5" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span>Priority email support</span>
+                            </li>
+                            <li class="flex items-start gap-3 text-sm">
+                                <svg class="w-5 h-5 text-brand-500 flex-shrink-0 mt-0.5" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span>Overage: $0.35/notarization</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="mt-auto">
+                        <a href="/signup?plan=pro"
+                            class="block w-full py-3.5 text-center bg-brand-500 text-black rounded-xl font-semibold hover:bg-brand-400 transition-all hover:shadow-lg hover:shadow-brand-500/20">
+                            Start 14-Day Free Trial
+                        </a>
+                        <p class="text-xs text-center text-gray-500 mt-3">No credit card required</p>
+                    </div>
+                </div>
+
+                <!-- Enterprise -->
+                <div class="relative p-8 rounded-2xl border border-white/10 bg-white/[0.02] flex flex-col">
+                    <div class="mb-6">
+                        <h3 class="text-xl font-semibold mb-1">Business</h3>
+                        <p class="text-sm text-gray-500">For growing organizations</p>
+                    </div>
+                    <div class="mb-2">
+                        <span class="text-5xl font-bold" id="enterprise-price">$349</span>
+                        <span class="text-gray-500" id="enterprise-period">/month</span>
+                    </div>
+                    <p class="text-sm text-gray-500 mb-6" id="enterprise-subtext">$0.17 per notarization</p>
+
+                    <div class="border-t border-white/5 pt-6 mb-6">
+                        <p class="text-xs text-gray-500 uppercase tracking-wider mb-4">Everything in Pro, plus</p>
+                        <ul class="space-y-3">
+                            <li class="flex items-start gap-3 text-sm">
+                                <svg class="w-5 h-5 text-brand-500 flex-shrink-0 mt-0.5" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span><strong>2,000</strong> notarizations/month</span>
+                            </li>
+                            <li class="flex items-start gap-3 text-sm">
+                                <svg class="w-5 h-5 text-brand-500 flex-shrink-0 mt-0.5" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span>Unlimited API keys</span>
+                            </li>
+                            <li class="flex items-start gap-3 text-sm">
+                                <svg class="w-5 h-5 text-brand-500 flex-shrink-0 mt-0.5" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span>Webhook integrations</span>
+                            </li>
+                            <li class="flex items-start gap-3 text-sm">
+                                <svg class="w-5 h-5 text-brand-500 flex-shrink-0 mt-0.5" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span>Dedicated account manager</span>
+                            </li>
+                            <li class="flex items-start gap-3 text-sm">
+                                <svg class="w-5 h-5 text-brand-500 flex-shrink-0 mt-0.5" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span>Custom SLA (99.9% uptime)</span>
+                            </li>
+                            <li class="flex items-start gap-3 text-sm">
+                                <svg class="w-5 h-5 text-brand-500 flex-shrink-0 mt-0.5" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span>Volume discounts available</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="mt-auto">
+                        <a href="/signup?plan=business"
+                            class="block w-full py-3.5 text-center border border-white/20 rounded-xl font-medium hover:bg-white/5 transition-all">
+                            Start Free Trial
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Enterprise -->
+                <div
+                    class="relative p-8 rounded-2xl border border-white/10 bg-gradient-to-b from-purple-500/5 to-transparent flex flex-col">
+                    <div class="mb-6">
+                        <h3 class="text-xl font-semibold mb-1">Enterprise</h3>
+                        <p class="text-sm text-gray-500">For large organizations</p>
+                    </div>
+                    <div class="mb-2">
+                        <span class="text-4xl font-bold">Custom</span>
+                    </div>
+                    <p class="text-sm text-gray-500 mb-6">Volume-based pricing</p>
+
+                    <div class="border-t border-white/5 pt-6 mb-6">
+                        <p class="text-xs text-gray-500 uppercase tracking-wider mb-4">Everything in Business, plus</p>
+                        <ul class="space-y-3">
+                            <li class="flex items-start gap-3 text-sm">
+                                <svg class="w-5 h-5 text-purple-400 flex-shrink-0 mt-0.5" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span><strong>Unlimited</strong> notarizations</span>
+                            </li>
+                            <li class="flex items-start gap-3 text-sm">
+                                <svg class="w-5 h-5 text-purple-400 flex-shrink-0 mt-0.5" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span>On-premise deployment</span>
+                            </li>
+                            <li class="flex items-start gap-3 text-sm">
+                                <svg class="w-5 h-5 text-purple-400 flex-shrink-0 mt-0.5" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span>Custom integrations</span>
+                            </li>
+                            <li class="flex items-start gap-3 text-sm">
+                                <svg class="w-5 h-5 text-purple-400 flex-shrink-0 mt-0.5" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span>White-label options</span>
+                            </li>
+                            <li class="flex items-start gap-3 text-sm">
+                                <svg class="w-5 h-5 text-purple-400 flex-shrink-0 mt-0.5" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span>24/7 phone support</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="mt-auto">
+                        <a href="/contact"
+                            class="block w-full py-3.5 text-center bg-purple-600 text-white rounded-xl font-medium hover:bg-purple-500 transition-all">
+                            Contact Sales
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Trust Badges -->
+            <div class="flex flex-wrap items-center justify-center gap-8 py-8 mb-16 border-y border-white/5">
+                <div class="flex items-center gap-2 text-sm text-gray-400">
+                    <svg class="w-5 h-5 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                    <span>30-day money-back guarantee</span>
+                </div>
+                <div class="flex items-center gap-2 text-sm text-gray-400">
+                    <svg class="w-5 h-5 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
+                    <span>Secure payment via Stripe</span>
+                </div>
+                <div class="flex items-center gap-2 text-sm text-gray-400">
+                    <svg class="w-5 h-5 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    <span>Cancel anytime</span>
+                </div>
+            </div>
+
+            <!-- Comparison Table -->
+            <div class="mb-20">
+                <h2 class="text-2xl font-bold text-center mb-8">Compare all features</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="border-b border-white/10">
+                                <th class="text-left py-4 px-4 font-medium text-gray-400">Feature</th>
+                                <th class="text-center py-4 px-4 font-medium">Starter</th>
+                                <th class="text-center py-4 px-4 font-medium text-brand-400">Pro</th>
+                                <th class="text-center py-4 px-4 font-medium">Business</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-white/5">
+                            <tr>
+                                <td class="py-4 px-4 text-gray-300">Notarizations/month</td>
+                                <td class="py-4 px-4 text-center">5 (trial)</td>
+                                <td class="py-4 px-4 text-center font-medium">250</td>
+                                <td class="py-4 px-4 text-center">2,000</td>
+                            </tr>
+                            <tr>
+                                <td class="py-4 px-4 text-gray-300">C2PA Signing</td>
+                                <td class="py-4 px-4 text-center"><svg class="w-5 h-5 text-brand-500 mx-auto"
+                                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 13l4 4L19 7" />
+                                    </svg></td>
+                                <td class="py-4 px-4 text-center"><svg class="w-5 h-5 text-brand-500 mx-auto"
+                                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 13l4 4L19 7" />
+                                    </svg></td>
+                                <td class="py-4 px-4 text-center"><svg class="w-5 h-5 text-brand-500 mx-auto"
+                                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 13l4 4L19 7" />
+                                    </svg></td>
+                            </tr>
+                            <tr>
+                                <td class="py-4 px-4 text-gray-300">IPFS Storage</td>
+                                <td class="py-4 px-4 text-center"><svg class="w-5 h-5 text-brand-500 mx-auto"
+                                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 13l4 4L19 7" />
+                                    </svg></td>
+                                <td class="py-4 px-4 text-center"><svg class="w-5 h-5 text-brand-500 mx-auto"
+                                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 13l4 4L19 7" />
+                                    </svg></td>
+                                <td class="py-4 px-4 text-center"><svg class="w-5 h-5 text-brand-500 mx-auto"
+                                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 13l4 4L19 7" />
+                                    </svg></td>
+                            </tr>
+                            <tr>
+                                <td class="py-4 px-4 text-gray-300">Blockchain Anchoring</td>
+                                <td class="py-4 px-4 text-center"><svg class="w-5 h-5 text-brand-500 mx-auto"
+                                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 13l4 4L19 7" />
+                                    </svg></td>
+                                <td class="py-4 px-4 text-center"><svg class="w-5 h-5 text-brand-500 mx-auto"
+                                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 13l4 4L19 7" />
+                                    </svg></td>
+                                <td class="py-4 px-4 text-center"><svg class="w-5 h-5 text-brand-500 mx-auto"
+                                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 13l4 4L19 7" />
+                                    </svg></td>
+                            </tr>
+                            <tr>
+                                <td class="py-4 px-4 text-gray-300">REST API Access</td>
+                                <td class="py-4 px-4 text-center"><svg class="w-5 h-5 text-gray-600 mx-auto" fill="none"
+                                        stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M6 18L18 6M6 6l12 12" />
+                                    </svg></td>
+                                <td class="py-4 px-4 text-center"><svg class="w-5 h-5 text-brand-500 mx-auto"
+                                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 13l4 4L19 7" />
+                                    </svg></td>
+                                <td class="py-4 px-4 text-center"><svg class="w-5 h-5 text-brand-500 mx-auto"
+                                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 13l4 4L19 7" />
+                                    </svg></td>
+                            </tr>
+                            <tr>
+                                <td class="py-4 px-4 text-gray-300">API Keys</td>
+                                <td class="py-4 px-4 text-center text-gray-500">—</td>
+                                <td class="py-4 px-4 text-center">3</td>
+                                <td class="py-4 px-4 text-center">Unlimited</td>
+                            </tr>
+                            <tr>
+                                <td class="py-4 px-4 text-gray-300">Webhooks</td>
+                                <td class="py-4 px-4 text-center"><svg class="w-5 h-5 text-gray-600 mx-auto" fill="none"
+                                        stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M6 18L18 6M6 6l12 12" />
+                                    </svg></td>
+                                <td class="py-4 px-4 text-center"><svg class="w-5 h-5 text-gray-600 mx-auto" fill="none"
+                                        stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M6 18L18 6M6 6l12 12" />
+                                    </svg></td>
+                                <td class="py-4 px-4 text-center"><svg class="w-5 h-5 text-brand-500 mx-auto"
+                                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 13l4 4L19 7" />
+                                    </svg></td>
+                            </tr>
+                            <tr>
+                                <td class="py-4 px-4 text-gray-300">Support</td>
+                                <td class="py-4 px-4 text-center text-gray-500">Community</td>
+                                <td class="py-4 px-4 text-center">Priority Email</td>
+                                <td class="py-4 px-4 text-center">Dedicated Manager</td>
+                            </tr>
+                            <tr>
+                                <td class="py-4 px-4 text-gray-300">SLA</td>
+                                <td class="py-4 px-4 text-center text-gray-500">—</td>
+                                <td class="py-4 px-4 text-center text-gray-500">—</td>
+                                <td class="py-4 px-4 text-center">99.9% uptime</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- FAQ -->
+            <div class="max-w-3xl mx-auto">
+                <h2 class="text-2xl font-bold text-center mb-8">Frequently asked questions</h2>
+                <div class="space-y-4">
+                    <details class="group p-5 rounded-xl border border-white/10 bg-white/[0.02]" open>
+                        <summary class="flex items-center justify-between cursor-pointer list-none">
+                            <span class="font-medium">What counts as a notarization?</span>
+                            <svg class="w-5 h-5 text-gray-400 group-open:rotate-180 transition-transform" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </summary>
+                        <p class="mt-3 text-gray-400 text-sm">
+                            One notarization = one file uploaded and processed. This includes C2PA signing, IPFS upload,
+                            and blockchain anchoring. <strong>Verifying existing files is always free and
+                                unlimited.</strong>
+                        </p>
+                    </details>
+                    <details class="group p-5 rounded-xl border border-white/10 bg-white/[0.02]">
+                        <summary class="flex items-center justify-between cursor-pointer list-none">
+                            <span class="font-medium">What happens if I exceed my monthly limit?</span>
+                            <svg class="w-5 h-5 text-gray-400 group-open:rotate-180 transition-transform" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </summary>
+                        <p class="mt-3 text-gray-400 text-sm">
+                            Free users will need to wait until next month. Pro and Enterprise users can continue at
+                            $0.05 per additional notarization, billed at the end of your billing cycle.
+                        </p>
+                    </details>
+                    <details class="group p-5 rounded-xl border border-white/10 bg-white/[0.02]">
+                        <summary class="flex items-center justify-between cursor-pointer list-none">
+                            <span class="font-medium">How long are my files stored?</span>
+                            <svg class="w-5 h-5 text-gray-400 group-open:rotate-180 transition-transform" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </summary>
+                        <p class="mt-3 text-gray-400 text-sm">
+                            <strong>Forever.</strong> Files are stored on IPFS (decentralized) and the cryptographic
+                            hash is anchored to Solana blockchain. Even if Basalt shuts down, your proofs remain
+                            independently verifiable.
+                        </p>
+                    </details>
+                    <details class="group p-5 rounded-xl border border-white/10 bg-white/[0.02]">
+                        <summary class="flex items-center justify-between cursor-pointer list-none">
+                            <span class="font-medium">Can I cancel anytime?</span>
+                            <svg class="w-5 h-5 text-gray-400 group-open:rotate-180 transition-transform" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </summary>
+                        <p class="mt-3 text-gray-400 text-sm">
+                            Yes. Cancel anytime from your dashboard—no questions asked. Your existing notarizations
+                            remain valid forever. You'll be downgraded to Free tier at the end of your billing period.
+                        </p>
+                    </details>
+                    <details class="group p-5 rounded-xl border border-white/10 bg-white/[0.02]">
+                        <summary class="flex items-center justify-between cursor-pointer list-none">
+                            <span class="font-medium">Do you offer discounts for nonprofits or startups?</span>
+                            <svg class="w-5 h-5 text-gray-400 group-open:rotate-180 transition-transform" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </summary>
+                        <p class="mt-3 text-gray-400 text-sm">
+                            Yes! We offer 50% off for verified nonprofits and early-stage startups. <a href="/contact"
+                                class="text-brand-400 hover:underline">Contact us</a> with details about your
+                            organization.
+                        </p>
+                    </details>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-white/5 py-8">
+        <div
+            class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-500">
+            <span>© 2025 Basalt Protocol</span>
+            <div class="flex gap-6">
+                <a href="/privacy" class="hover:text-white transition-colors">Privacy</a>
+                <a href="/terms" class="hover:text-white transition-colors">Terms</a>
+                <a href="/contact" class="hover:text-white transition-colors">Contact</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        let isAnnual = false;
+
+        // Smooth number animation function
+        function animateValue(element, start, end, duration, prefix = '$', suffix = '') {
+            const startTime = performance.now();
+            const diff = end - start;
+
+            function update(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+
+                // Easing function (ease-out cubic)
+                const eased = 1 - Math.pow(1 - progress, 3);
+
+                const current = Math.round(start + diff * eased);
+                element.textContent = prefix + current + suffix;
+
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                }
+            }
+
+            requestAnimationFrame(update);
+        }
+
+        // Get current price value from element
+        function getCurrentValue(element) {
+            const text = element.textContent.replace(/[^0-9]/g, '');
+            return parseInt(text) || 0;
+        }
+
+        function toggleBilling() {
+            isAnnual = !isAnnual;
+            const toggle = document.getElementById('toggle-dot');
+            const monthlyLabel = document.getElementById('monthly-label');
+            const annualLabel = document.getElementById('annual-label');
+
+            const proPrice = document.getElementById('pro-price');
+            const enterprisePrice = document.getElementById('enterprise-price');
+
+            const duration = 500; // Animation duration in ms
+
+            if (isAnnual) {
+                toggle.style.transform = 'translateX(28px)';
+                monthlyLabel.classList.add('text-gray-600');
+                monthlyLabel.classList.remove('text-gray-400');
+                annualLabel.classList.remove('text-gray-400');
+                annualLabel.classList.add('text-white');
+
+                // Animate prices (20% off)
+                animateValue(proPrice, getCurrentValue(proPrice), 79, duration);
+                animateValue(enterprisePrice, getCurrentValue(enterprisePrice), 279, duration);
+
+                // Update subtexts with fade
+                setTimeout(() => {
+                    document.getElementById('pro-subtext').textContent = 'Billed $948/year (save $240)';
+                    document.getElementById('enterprise-subtext').textContent = 'Billed $3,348/year (save $840)';
+                }, duration / 2);
+            } else {
+                toggle.style.transform = 'translateX(0)';
+                monthlyLabel.classList.remove('text-gray-600');
+                monthlyLabel.classList.add('text-gray-400');
+                annualLabel.classList.add('text-gray-400');
+                annualLabel.classList.remove('text-white');
+
+                // Animate back to monthly
+                animateValue(proPrice, getCurrentValue(proPrice), 99, duration);
+                animateValue(enterprisePrice, getCurrentValue(enterprisePrice), 349, duration);
+
+                // Update subtexts with fade
+                setTimeout(() => {
+                    document.getElementById('pro-subtext').textContent = '$0.40 per notarization';
+                    document.getElementById('enterprise-subtext').textContent = '$0.17 per notarization';
+                }, duration / 2);
+            }
+        }
+
+        // Add CSS transition for subtexts
+        document.addEventListener('DOMContentLoaded', function () {
+            const subtexts = document.querySelectorAll('#pro-subtext, #enterprise-subtext');
+            subtexts.forEach(el => {
+                el.style.transition = 'opacity 0.3s ease';
+            });
+        });
+    </script>
+</body>
+
+</html>

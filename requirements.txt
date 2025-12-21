@@ -9,3 +9,7 @@ jinja2
 python-dotenv
 Pillow
 cryptography
+# Database & Auth
+sqlalchemy
+passlib[bcrypt]
+pyjwt

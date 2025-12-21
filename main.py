@@ -39,6 +39,14 @@ app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
+# Include auth and dashboard routes
+try:
+    from routes_auth import router as auth_router
+    app.include_router(auth_router)
+    logger.info("Auth routes loaded successfully")
+except ImportError as e:
+    logger.warning(f"Auth routes not loaded: {e}")
+
 # Initialize Solana Client
 solana_client = Client(SOLANA_RPC)
 
